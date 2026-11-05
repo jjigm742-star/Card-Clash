@@ -1,0 +1,12 @@
+# GitHub 저장소 연결 후 Render Blueprint로 1개 웹 서비스를 배포합니다.
+# https://dashboard.render.com/ -> New -> Blueprint
+services:
+  - type: web
+    name: cardclash-1-0
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: CARDCLASH_ADMIN_TOKEN
+        generateValue: true
