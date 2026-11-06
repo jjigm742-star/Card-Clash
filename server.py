@@ -1,4 +1,4 @@
-"""Card Clash 1.0 authoritative real-time referee.
+"""Card Clash 2.0 authoritative real-time referee.
 
 One isolated Chromium page per match runs the original v5/v1 engine.
 Each websocket sees only its seat's hand, deck count and public board.
@@ -53,7 +53,7 @@ def valid_deck(race, deck):
     if race not in RACES or not isinstance(deck, dict):
         return False
     allowed = {c['name'] for c in BASE_DATA['cards']}  # 혼합 덱 허용
-    return all(k in allowed and type(v) is int and 0 <= v <= 3 for k, v in deck.items()) and sum(deck.values()) == 25
+    return all(k in allowed and type(v) is int and 0 <= v <= 3 for k, v in deck.items()) and sum(deck.values()) == 30
 
 
 def apply_balance(patch, save=True):
@@ -171,12 +171,12 @@ class Room:
               cancel:!!modal.querySelector('button.close')};
           }
           return {turn:g.turn,active:g.active,priority:g.priority,winner:g.winner,seed:g.rng,
-            stacks:g.stack.map(x=>({name:x.name,owner:x.owner,type:x.type})),
+            stacks:g.stack.map(x=>({name:x.name,owner:x.owner,type:x.type,sourceName:x.sourceName||x.text||x.name})),
             attack:g.attack?{owner:g.attack.owner,attacker:g.attack.attacker,target:g.attack.target}:null,
-            logs:g.logs.slice(-160),err:document.getElementById('error')?.textContent||'',prompt,
+            logs:g.logs.slice(-160),triggers:g.triggers.map(x=>({owner:x.owner,sourceName:x.sourceName||x.text||x.name})),err:document.getElementById('error')?.textContent||'',prompt,
             players:g.players.map(x=>({race:x.race,deck_count:x.deck.length,hand_count:x.hand.length,
               hand:x.hand,grave:x.grave,a:x.a,b:x.b,me:x.me,te:x.te,summons:x.summons})),
-            rules:DATA.rules,version:'카드클래시 1.0'};
+            rules:DATA.rules,version:'카드클래시 2.0'};
         }''')
 
     async def broadcast(self):
@@ -311,7 +311,7 @@ async def lifespan(app):
     await BROWSER.close()
     await PLAYWRIGHT.stop()
 
-app=FastAPI(title='Card Clash 1.0',lifespan=lifespan)
+app=FastAPI(title='Card Clash 2.0',lifespan=lifespan)
 
 @app.get('/')
 async def home():return FileResponse(APP/'index.html')
@@ -326,7 +326,7 @@ async def page(filename: str):
 async def get_config():return public_data()
 
 @app.get('/api/health')
-async def health():return {'ok':True,'version':'1.0','rooms':len(ROOMS)}
+async def health():return {'ok':True,'version':'2.0','rooms':len(ROOMS)}
 
 @app.post('/api/admin/patch')
 async def patch_balance(request: Request):
@@ -364,7 +364,7 @@ async def web_socket(ws: WebSocket):
                 race=msg.get('race')
                 deck=msg.get('deck')
                 if not valid_deck(race,deck):
-                    await ws.send_json({'type':'error','message':'총 25장, 카드 종류별 0~3장으로 구성해야 해.'});continue
+                    await ws.send_json({'type':'error','message':'총 30장, 카드 종류별 0~3장으로 구성해야 해.'});continue
                 if typ=='join':
                     code=str(msg.get('code','')).strip().upper()
                     room=ROOMS.get(code)

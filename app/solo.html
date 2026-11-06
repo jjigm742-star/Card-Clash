@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>카드클래시 1.0 | 72종 확장판 · 솔로 대전</title><style>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>카드클래시 2.0 | 80종 확장판 · 솔로 대전</title><style>
 :root{color-scheme:dark;--bg:#07101e;--panel:#14233a;--border:#344a67;--ink:#eff6ff;--muted:#b4c3d6;--gold:#f3d27a}
 *{box-sizing:border-box}body{background:radial-gradient(ellipse at top,#132b46 0%,#091222 57%,#070c18 100%);margin:0;color:var(--ink);font:15px/1.55 system-ui,'Malgun Gothic',sans-serif}
 main{max-width:1550px;padding:22px;margin:0 auto}h1{font-size:29px;margin:0}h2{font-size:19px;margin:0 0 10px}h3{font-size:14px;margin:2px 0 8px}header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
@@ -22,7 +22,7 @@ section{background:#14233be8;border:1px solid var(--border);border-radius:14px;p
 .line.drop-over{background:#19545c;border-color:#6bffe0;box-shadow:inset 0 0 25px #69ffd54a,0 0 15px #15b78c59}
 .drag-ghost{position:fixed;pointer-events:none;z-index:999;padding:10px 16px;border-radius:12px;border:2px solid #79ffe0;background:#233d52ee;color:white;box-shadow:0 8px 26px #0009;font-weight:750;max-width:180px}
 
-/* 《카드클래시》 1.0 72종 — 모바일 드래그·Undo 유지 */
+/* 《카드클래시》 2.0 80종 — 모바일 드래그·Undo 유지 */
 .header-tools{display:flex;align-items:center;gap:7px}
 #mobileMenuBtn{display:none;background:#314e6b;border-color:#8cc7d1}
 .quick-undo{display:none}
@@ -138,18 +138,35 @@ section{background:#14233be8;border:1px solid var(--border);border-radius:14px;p
 .deck-actions button{flex:1 1 auto;padding:8px 10px;font-size:13px}
 .deck-actions .primary{flex:2 1 140px}
 @media(max-width:600px){.deck-dialog{padding:11px;gap:6px}.deck-tabs button{padding:6px 7px}.deck-card-name{font-size:13px}.deck-card-description{font-size:11px}.deck-counter button{width:32px;height:32px}}
+
+/* Card Clash 2.0 readability and combat-feedback */
+.card .atk-breakdown{display:flex;flex-wrap:wrap;align-items:center;gap:3px;margin-top:5px;padding:3px;border-radius:5px;background:rgba(0,0,0,.22);font-size:10px;line-height:1.35}
+.atk-chip{padding:1px 4px;border-radius:4px;font-weight:800;border:1px solid rgba(255,255,255,.4);cursor:help;white-space:nowrap}
+.atk-chip.plus{background:rgba(28,180,96,.25)}.atk-chip.minus{background:rgba(245,67,67,.28)}
+.atk-result{font-weight:800}.atk-base{opacity:.85}
+.grave-button{background:rgba(168,135,225,.15);border:1px solid #aa91e8;cursor:pointer;color:inherit}
+.grave-button:hover,.grave-button:focus-visible{filter:brightness(1.4);outline:2px solid #cabaf5}
+.grave-dialog{max-width:min(720px,95vw)}.grave-list{max-height:58vh;overflow:auto;display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.grave-row{display:flex;flex-direction:column;gap:3px;border:1px solid rgba(177,178,201,.35);padding:9px;border-radius:7px;background:rgba(12,16,30,.5);overflow-wrap:anywhere}
+.grave-row span{font-size:12px;opacity:.92}
+.deck-counter{position:relative;display:inline-flex;align-items:center;gap:4px}
+.deck-flash{animation:deck-pop .65s ease-in-out 1;border-color:#ffc166!important;background:rgba(255,178,45,.35)!important}
+.deck-loss{color:#ff995e;animation:deck-loss .75s ease forwards;font-size:14px;text-shadow:0 1px 1px #111}
+@keyframes deck-pop{0%,100%{transform:scale(1)}20%,65%{transform:scale(1.16);filter:brightness(1.8)}}
+@keyframes deck-loss{0%{opacity:0;transform:translateY(6px)}30%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
+@media(prefers-reduced-motion:reduce){.deck-flash,.deck-loss{animation:none}}
 </style></head><body><main>
-<header><div><h1>🎴 카드클래시 1.0 — 72종 확장판</h1><div class="hint">72종 · 4종족 · 후공 150/150 · 덱 편집 · 오프라인 단독 실행</div></div><div class="header-tools"><span class="pill">📱 조작감 개선 1차 · 끌어 소환·이동 · ↶ Undo</span><button id="mobileMenuBtn" type="button" aria-controls="setupToolbar" aria-expanded="false" onclick="toggleMobileMenu()">☰ 메뉴·설정</button></div></header>
+<header><div><h1>🎴 카드클래시 2.0 — 80종 확장판</h1><div class="hint">80종 · 4종족 · 후공 150/150 · 덱 편집 · 오프라인 단독 실행</div></div><div class="header-tools"><span class="pill">🎮 2.0 · 80종 카드 · 30장 덱 · 개선 UI</span><button id="mobileMenuBtn" type="button" aria-controls="setupToolbar" aria-expanded="false" onclick="toggleMobileMenu()">☰ 메뉴·설정</button></div></header>
 <section class="toolbar" id="setupToolbar"><label>왼쪽 <select id="race0"></select></label><label>오른쪽 <select id="race1"></select></label><label>랜덤 시드 <input type="number" id="seed" value="42" style="width:85px"></label><button class="primary" onclick="newGame()">새 대전</button><button onclick="showBalanceEditor()">⚙️ 수치 편집</button><button onclick="showDecks()">🛠️ 덱 편집</button><button onclick="showCatalog()">📖 카드 목록</button><button onclick="showLogModal()">📜 대전 기록</button><button onclick="saveGame()">저장</button><button onclick="loadGame()">불러오기</button><button id="undoBtn" class="undo" onclick="undoStep()" disabled>↶ 직전 행동 되돌리기</button><button id="historyBtn" onclick="showUndoHistory()" disabled>🕘 시점 선택</button><button onclick="markCheckpoint()">📍 체크포인트</button><button onclick="exportLog()">기록 JSON</button></section>
 <div id="status" class="status">종족을 선택하고 새 대전을 시작해 줘.</div>
 <section id="actionPanel"><h2>⚔️ 행동 · 효과 · 대응</h2><div class="hint" id="instructions" title="선택 카드 효과 확인" onclick="showSelectedCardDetails()"></div><div class="buttons" id="actionButtons" style="margin:12px 0"><button onclick="summon()">몬스터 소환</button><button onclick="move()">라인 이동</button><button onclick="attack()">공격 선언</button><button class="primary" onclick="activate()">⚡ 기동 효과</button><button onclick="cast()">기술 발동</button><button id="passBtn" onclick="pass()">대응 패스</button><button id="combatBtn" hidden>전투 종료</button><button class="undo quick-undo" id="quickUndoBtn" onclick="undoStep()" disabled>↶ 되돌리기</button><button onclick="openWindow()">상대 대응 창 열기</button><button class="danger" onclick="endTurn()">턴 종료 →</button></div><div id="chain" class="notice"></div><div id="error" style="color:#ffad9f;font-weight:700;margin-top:7px" aria-live="polite"></div></section>
 <div id="board" class="grid"></div><section id="logPanel"><h2>📜 대전 기록</h2><div id="log" class="log"></div></section>
 <p class="hint" id="footHelp">📌 후공 첫 턴 충전 150ME / 150TE. 일반 소환 최대 2회, B라인 소환·A라인 공격, ME·TE 상한 300, A/B라인 각 최대 5장. 손패 몬스터를 B라인으로 드래그해 소환, 자기 필드 몬스터를 A/B라인으로 드래그해 이동. ↶ Undo 및 체크포인트 복원 지원. 빛나는 테두리는 사용 가능한 기동 능력 표시. 상대 대응 수단이 없을 때 우선권·전투는 자동 진행. 덱 편집 메뉴에서 카드 수량만 변경·저장 가능하며, 새 대전부터 적용돼. 별도 게임 저장과 JSON 내보내기를 지원해.</p>
-</main><div id="modalroot"></div><script>const DATA={"version":"카드클래시 1.0 — 72종 확장판","rules":{"second_player_first_turn_bonus":50,"deck_size":25,"max_per_card":3,"ME_TE_cap":300,"summons_per_turn":2,"line_capacity":5},"cards":[{"id":"LM01","name":"안경 원숭이","race":"Land","type":"monster","cost":30,"atk":1000,"effects":"","desc":"효과 없음"},{"id":"LM02","name":"돌진 양","race":"Land","type":"monster","cost":55,"atk":1500,"effects":"smash:2","desc":"강타 2"},{"id":"LM03","name":"모래 먹는 하마","race":"Land","type":"monster","cost":75,"atk":2000,"effects":"","desc":"효과 없음"},{"id":"LM04","name":"돌파 야생마","race":"Land","type":"monster","cost":100,"atk":2500,"effects":"breakthrough","desc":"돌파 1"},{"id":"LM05","name":"야수의 왕 사자","race":"Land","type":"monster","cost":130,"atk":3000,"effects":"breakthrough","desc":"돌파 1"},{"id":"OM01","name":"흰동가리","race":"Ocean","type":"monster","cost":25,"atk":1000,"effects":"","desc":"효과 없음"},{"id":"OM02","name":"보호 가리비","race":"Ocean","type":"monster","cost":50,"atk":1500,"effects":"protect","desc":"보호"},{"id":"OM03","name":"겁쟁이 거북이","race":"Ocean","type":"monster","cost":60,"atk":2000,"effects":"cannot_attack","desc":"공격 불가"},{"id":"OM04","name":"날랜 상어","race":"Ocean","type":"monster","cost":90,"atk":2500,"effects":"","desc":"효과 없음"},{"id":"OM05","name":"크라켄","race":"Ocean","type":"monster","cost":150,"atk":3500,"effects":"","desc":"효과 없음"},{"id":"SM01","name":"평화의 참새","race":"Sky","type":"monster","cost":15,"atk":500,"effects":"","desc":"효과 없음"},{"id":"SM02","name":"기관총 거위","race":"Sky","type":"monster","cost":50,"atk":500,"effects":"quick_debuff:1000","desc":"기동/신속: 자신이 B라인에 있을 때 적 A라인 1장 ATK -1000 (턴당 1회)"},{"id":"SM03","name":"고속 알바트로스","race":"Sky","type":"monster","cost":35,"atk":1000,"effects":"speed","desc":"고속"},{"id":"SM04","name":"레인보우 백조","race":"Sky","type":"monster","cost":60,"atk":1500,"effects":"reaction_to_hand","desc":"리액션: 패로"},{"id":"SM05","name":"격노한 제비","race":"Sky","type":"monster","cost":85,"atk":2000,"effects":"smash:2","desc":"강타 2"},{"id":"XM01","name":"저주받은 책","race":"Others","type":"monster","cost":50,"atk":1000,"effects":"reaction_deploy:B","desc":"리액션: B라인 소환"},{"id":"XM02","name":"퀸카 인형","race":"Others","type":"monster","cost":70,"atk":1500,"effects":"on_summon_mill_both:1","desc":"소환 시 양측 덱 1장씩 소진"},{"id":"XM03","name":"웃는 광대","race":"Others","type":"monster","cost":85,"atk":1500,"effects":"on_summon_te:50","desc":"소환 시 TE +50"},{"id":"XM04","name":"최면술 로봇","race":"Others","type":"monster","cost":120,"atk":2000,"effects":"hypnotize","desc":"기동: 적 1장 라인 이동 (턴당 1회)"},{"id":"XM05","name":"암흑룡","race":"Others","type":"monster","cost":200,"atk":3000,"effects":"reaction_deploy:A","desc":"리액션: A라인 소환"},{"id":"LT01","name":"북소리","race":"Land","type":"technique","cost":150,"atk":0,"effects":"buff_all:1000","desc":"아군 랜드 전체 ATK +1000"},{"id":"LT02","name":"야수의 심장","race":"Land","type":"technique","cost":65,"atk":0,"effects":"buff_break:500","desc":"랜드 1장 ATK +500 · 돌파1 부여"},{"id":"LT03","name":"파이어볼","race":"Land","type":"technique","cost":60,"atk":0,"effects":"debuff:1000","desc":"적 1장 ATK -1000"},{"id":"LT04","name":"더블 파이어","race":"Land","type":"technique","cost":110,"atk":0,"effects":"debuff:2000|reaction_cast","desc":"적 1장 ATK -2000 · 리액션: 무료 발동"},{"id":"LT05","name":"파이어 토네이도","race":"Land","type":"technique","cost":140,"atk":0,"effects":"debuff:3000","desc":"적 1장 ATK -3000"},{"id":"OT01","name":"격류","race":"Ocean","type":"technique","cost":150,"atk":0,"effects":"buff_all:1000","desc":"아군 오션 전체 ATK +1000"},{"id":"OT02","name":"생명의 물","race":"Ocean","type":"technique","cost":50,"atk":0,"effects":"buff_one:1000","desc":"아군 오션 1장 ATK +1000"},{"id":"OT03","name":"썰물","race":"Ocean","type":"technique","cost":80,"atk":0,"effects":"move_enemy:B","desc":"상대 A라인 몬스터 1장 B라인 이동"},{"id":"OT04","name":"심해의 부름","race":"Ocean","type":"technique","cost":150,"atk":0,"effects":"sacrifice_me:150","desc":"아군 오션 1장 묘지로 보내 ME +150"},{"id":"OT05","name":"거품","race":"Ocean","type":"technique","cost":75,"atk":0,"effects":"grant_protect","desc":"아군 오션 1장 보호 부여"},{"id":"ST01","name":"순풍","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"buff_all:1000","desc":"아군 스카이 전체 ATK +1000"},{"id":"ST02","name":"섬광","race":"Sky","type":"technique","cost":65,"atk":0,"effects":"buff_speed:500","desc":"아군 스카이 1장 ATK +500 · 고속 부여"},{"id":"ST03","name":"격앙","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"smash_all:1","desc":"아군 스카이 전체 강타 +1"},{"id":"ST04","name":"희생의 날개","race":"Sky","type":"technique","cost":75,"atk":0,"effects":"sacrifice_draw:2","desc":"아군 스카이 1장 묘지로 보내 2장 드로우"},{"id":"ST05","name":"역풍","race":"Sky","type":"technique","cost":100,"atk":0,"effects":"bounce_enemy_A|reaction_cast","desc":"상대 A라인 1장 패로 · 리액션: 무료 발동"},{"id":"XT01","name":"어둠의 공장","race":"Others","type":"technique","cost":100,"atk":0,"effects":"cycle_hand","desc":"패에서 임의의 카드 덱으로 되돌리고 같은 장수 드로우"},{"id":"XT02","name":"칠흑의 망토","race":"Others","type":"technique","cost":45,"atk":0,"effects":"buff_one:500|reaction_to_hand","desc":"아군 아더스 1장 ATK +500 · 리액션: 패로"},{"id":"XT03","name":"화산 분출","race":"Others","type":"technique","cost":100,"atk":0,"effects":"mill_asymmetric:2,1|reaction_to_hand","desc":"자신 덱 2장·상대 덱 1장 소진 · 리액션: 패로"},{"id":"XT04","name":"파괴광선","race":"Others","type":"technique","cost":145,"atk":0,"effects":"destroy_A|reaction_cast","desc":"상대 A라인 몬스터 1장 파괴 · 리액션: 무료 발동"},{"id":"XT05","name":"다른 이들의 분노","race":"Others","type":"technique","cost":230,"atk":0,"effects":"destroy_all|reaction_to_hand","desc":"양측 필드 모든 몬스터 파괴 · 리액션: 패로"},{"id":"LM06","name":"타이거드라고","race":"Land","type":"monster","cost":200,"atk":4000,"effects":"breakthrough|smash:3|on_summon_debuff:2000","tribute":1,"desc":"제물 1 · 돌파 1 · 강타 3 · 소환 시 적 1장 ATK -2000"},{"id":"OM06","name":"해룡 레비아탄","race":"Ocean","type":"monster","cost":200,"atk":4000,"effects":"breakthrough|leviathan_buff:500","tribute":1,"desc":"제물 1 · 돌파 1 · 기동/신속: 패 1장을 버리고 아군 오션 1장 ATK +500 (턴당 1회)"},{"id":"SM06","name":"지휘관 독수리","race":"Sky","type":"monster","cost":200,"atk":3000,"effects":"speed|sky_aura:500","tribute":1,"desc":"제물 1 · 고속 · A라인이면 스카이 전체 ATK +500"},{"id":"XM06","name":"멸망룡 공허","race":"Others","type":"monster","cost":200,"atk":3500,"effects":"on_summon_destroy|reaction_to_hand","tribute":1,"desc":"제물 1 · 소환 시 적 A라인 몬스터 1장 파괴(선택) · 리액션: 패로"},{"id":"V345","name":"줄무늬 치타","race":"Land","type":"monster","cost":50,"atk":1000,"effects":"rush","desc":"러시: 한 턴 최대 2회 기본 행동"},{"id":"V346","name":"박사 앵무새","race":"Sky","type":"monster","cost":75,"atk":1500,"effects":"on_summon_search_sky","desc":"소환 시 덱에서 스카이 기술 1장 패로"},{"id":"V347","name":"티타늄 산호","race":"Ocean","type":"monster","cost":95,"atk":2500,"effects":"cannot_attack|protect","desc":"공격 불가 · 보호"},{"id":"V348","name":"보물 상자","race":"Others","type":"monster","cost":100,"atk":2000,"effects":"on_destroy_te:100","desc":"필드에서 파괴될 때 TE +100"},{"id":"V349","name":"괴력 베어","race":"Land","type":"monster","cost":105,"atk":2500,"effects":"attack_buff:500","desc":"공격 선언 시 자신 ATK +500 (턴 종료까지)"},{"id":"V350","name":"둔한 펭귄","race":"Ocean","type":"monster","cost":100,"atk":2000,"effects":"reaction_deploy:A","desc":"리액션: A라인에 등장"},{"id":"V351","name":"얼티밋 팔콘","race":"Sky","type":"monster","cost":130,"atk":2500,"effects":"smash:2|on_summon_move_any","desc":"강타 2 · 소환 시 필드 몬스터 1장 라인 이동(자신 포함)"},{"id":"V352","name":"만년서리","race":"Others","type":"monster","cost":40,"atk":500,"effects":"quick_send_move_A_B","desc":"기동/신속: 자신을 묘지로 보내 A라인 몬스터 1장 B라인 이동"},{"id":"V353","name":"저돌맹진","race":"Land","type":"technique","cost":50,"atk":0,"effects":"rush_forward","desc":"아군 B라인 랜드 1장 A라인 이동 · 강타 +1"},{"id":"V354","name":"바다의 수호","race":"Ocean","type":"technique","cost":105,"atk":0,"effects":"buff_one_enemy_turn:2000|reaction_to_hand","desc":"상대 턴에만: 아군 오션 1장 ATK +2000 · 리액션: 패로"},{"id":"V355","name":"음속돌파","race":"Sky","type":"technique","cost":80,"atk":0,"effects":"speed_all","desc":"아군 모든 스카이 몬스터 고속 부여"},{"id":"V356","name":"연금술","race":"Others","type":"technique","cost":225,"atk":0,"effects":"alchemy","desc":"아군 아더스 1장 파괴 후 패 몬스터 조건 무시 B 특수 소환 또는 자기 묘지 2장 덱으로"},{"id":"V357","name":"대화재","race":"Land","type":"technique","cost":250,"atk":0,"effects":"inferno:4000","desc":"적 A라인에 총 ATK -4000을 500 단위 배분·동시 적용"},{"id":"V358","name":"방어벽","race":"Ocean","type":"technique","cost":80,"atk":0,"effects":"effect_shield","desc":"이번 턴 아군 1장 상대 몬스터/기술 효과 면역"},{"id":"V359","name":"거품나비","race":"Sky","type":"monster","cost":35,"atk":500,"effects":"quick_negate","desc":"기동/신속: 자신을 묘지로 보내 적 발동형 몬스터 효과 1회 무효 (리액션 제외)"},{"id":"V360","name":"좀비미라","race":"Others","type":"monster","cost":140,"atk":2500,"effects":"breakthrough|smash:2|reaction_to_hand","desc":"돌파1 · 강타2 · 리액션: 패로"},{"id":"V501","name":"헬킹콩","race":"Land","type":"monster","cost":155,"atk":3500,"effects":"smash:2|self_destroy_on_A_to_B","desc":"강타 2 · 이 몬스터가 A→B 이동하면 파괴"},{"id":"V502","name":"물결 고래","race":"Ocean","type":"monster","cost":135,"atk":3000,"effects":"protect","desc":"보호 · 공격 가능"},{"id":"V503","name":"리더 기러기","race":"Sky","type":"monster","cost":75,"atk":1500,"effects":"quick_leader_move","desc":"기동/신속: 자신이 A라인에 있을 때 아군 스카이 1장을 B→A 이동 (턴당 1회)"},{"id":"V504","name":"기억의 기차","race":"Others","type":"monster","cost":135,"atk":2500,"effects":"enemy_monster_immune","desc":"상대 몬스터 효과를 받지 않음 (기술·전투는 영향받음)"},{"id":"OT06","name":"밀물","race":"Ocean","type":"technique","cost":75,"atk":0,"effects":"move_enemy_front|reaction_to_hand","desc":"상대 B라인 몬스터 1장을 A라인으로 이동 · 리액션: 손패로"},{"id":"LM07","name":"돌격 야생마","race":"Land","type":"monster","cost":100,"atk":2000,"effects":"rush","desc":"러시: 한 턴에 기본 행동 2회"},{"id":"LM08","name":"함정 민들레","race":"Land","type":"monster","cost":65,"atk":1500,"effects":"on_destroy_debuff:1000|reaction_deploy:A","desc":"필드에서 파괴되면 적 몬스터 1장 ATK -1000 · 리액션: A라인 특수 소환"},{"id":"OT07","name":"긴급 출항","race":"Ocean","type":"technique","cost":110,"atk":0,"effects":"summon_protect_A","desc":"상대 턴에만: 패의 보호 능력 보유 몬스터 1장을 A라인에 특수 소환 (진행 중인 공격 보호 가능)"},{"id":"SM07","name":"능숙 알바트로스","race":"Sky","type":"monster","cost":65,"atk":1000,"effects":"attack_buff:1000","desc":"공격 선언 시 자신 ATK +1000 (턴 종료까지)"},{"id":"ST07","name":"일석이조","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"summon_small_sky:A|reaction_summon_small_sky:B","desc":"패의 ATK 1000 이하 스카이 몬스터 최대 2장 A라인 특수 소환 · 리액션: 최대 2장 B라인 특수 소환"},{"id":"XM07","name":"유령 고양이","race":"Others","type":"monster","cost":50,"atk":500,"effects":"stealth","desc":"스텔스: 상대 A라인 몬스터가 있어도 상대 덱 직접 공격 가능"},{"id":"XT07","name":"마녀여왕의 가호","race":"Others","type":"technique","cost":130,"atk":0,"effects":"indestructible","desc":"이번 턴 자신 필드의 몬스터 1장은 모든 파괴에 면역 (ATK 0 이하 포함)"}],"decks":{"Land":{"안경 원숭이":1,"줄무늬 치타":3,"돌진 양":1,"모래 먹는 하마":2,"야수의 왕 사자":1,"헬킹콩":2,"타이거드라고":3,"파이어볼":2,"야수의 심장":2,"더블 파이어":3,"파이어 토네이도":1,"대화재":2,"돌파 야생마":2},"Ocean":{"흰동가리":3,"보호 가리비":3,"티타늄 산호":1,"물결 고래":3,"크라켄":2,"해룡 레비아탄":2,"생명의 물":3,"썰물":2,"방어벽":2,"바다의 수호":2,"심해의 부름":2},"Sky":{"평화의 참새":2,"거품나비":2,"기관총 거위":3,"리더 기러기":1,"박사 앵무새":3,"격노한 제비":2,"얼티밋 팔콘":2,"지휘관 독수리":3,"역풍":2,"격앙":2,"순풍":3},"Others":{"만년서리":1,"저주받은 책":2,"퀸카 인형":3,"웃는 광대":1,"보물 상자":1,"기억의 기차":1,"좀비미라":1,"암흑룡":2,"멸망룡 공허":3,"어둠의 공장":2,"화산 분출":3,"파괴광선":3,"연금술":2}}};
+</main><div id="modalroot"></div><script>const DATA={"version":"카드클래시 2.0 — 80종 / 30장 덱","rules":{"second_player_first_turn_bonus":50,"deck_size":30,"max_per_card":3,"ME_TE_cap":300,"summons_per_turn":2,"line_capacity":5},"cards":[{"id":"LM01","name":"안경 원숭이","race":"Land","type":"monster","cost":25,"atk":1000,"effects":"","desc":"효과 없음"},{"id":"LM02","name":"돌진 양","race":"Land","type":"monster","cost":55,"atk":1500,"effects":"smash:2","desc":"강타 2"},{"id":"LM03","name":"모래 먹는 하마","race":"Land","type":"monster","cost":75,"atk":2000,"effects":"","desc":"효과 없음"},{"id":"LM04","name":"돌파 야생마","race":"Land","type":"monster","cost":100,"atk":2500,"effects":"breakthrough","desc":"돌파 1"},{"id":"LM05","name":"야수의 왕 사자","race":"Land","type":"monster","cost":130,"atk":3000,"effects":"breakthrough","desc":"돌파 1"},{"id":"OM01","name":"흰동가리","race":"Ocean","type":"monster","cost":20,"atk":1000,"effects":"","desc":"효과 없음"},{"id":"OM02","name":"보호 가리비","race":"Ocean","type":"monster","cost":50,"atk":1500,"effects":"protect","desc":"보호"},{"id":"OM03","name":"겁쟁이 거북이","race":"Ocean","type":"monster","cost":60,"atk":2000,"effects":"cannot_attack","desc":"공격 불가"},{"id":"OM04","name":"날랜 상어","race":"Ocean","type":"monster","cost":90,"atk":2500,"effects":"","desc":"효과 없음"},{"id":"OM05","name":"크라켄","race":"Ocean","type":"monster","cost":150,"atk":3500,"effects":"","desc":"효과 없음"},{"id":"SM01","name":"평화의 참새","race":"Sky","type":"monster","cost":15,"atk":500,"effects":"","desc":"효과 없음"},{"id":"SM02","name":"기관총 거위","race":"Sky","type":"monster","cost":50,"atk":500,"effects":"quick_debuff:1000","desc":"기동/신속: 자신이 B라인에 있을 때 적 A라인 1장 ATK -1000 (턴당 1회)"},{"id":"SM03","name":"고속 알바트로스","race":"Sky","type":"monster","cost":35,"atk":1000,"effects":"speed","desc":"고속"},{"id":"SM04","name":"레인보우 백조","race":"Sky","type":"monster","cost":60,"atk":1500,"effects":"reaction_to_hand","desc":"리액션: 패로"},{"id":"SM05","name":"격노한 제비","race":"Sky","type":"monster","cost":85,"atk":2000,"effects":"smash:2","desc":"강타 2"},{"id":"XM01","name":"저주받은 책","race":"Others","type":"monster","cost":45,"atk":1000,"effects":"reaction_deploy:B","desc":"리액션: B라인 소환"},{"id":"XM02","name":"퀸카 인형","race":"Others","type":"monster","cost":70,"atk":1500,"effects":"on_summon_mill_both:1","desc":"소환 시 양측 덱 1장씩 소진"},{"id":"XM03","name":"웃는 광대","race":"Others","type":"monster","cost":85,"atk":1500,"effects":"on_summon_te:50","desc":"소환 시 TE +50"},{"id":"XM04","name":"최면술 로봇","race":"Others","type":"monster","cost":120,"atk":2000,"effects":"hypnotize","desc":"기동: 적 1장 라인 이동 (턴당 1회)"},{"id":"XM05","name":"암흑룡","race":"Others","type":"monster","cost":200,"atk":3000,"effects":"reaction_deploy:A","desc":"리액션: A라인 소환"},{"id":"LT01","name":"북소리","race":"Land","type":"technique","cost":150,"atk":0,"effects":"buff_all:1000","desc":"아군 랜드 전체 ATK +1000"},{"id":"LT02","name":"야수의 심장","race":"Land","type":"technique","cost":65,"atk":0,"effects":"buff_break:500","desc":"랜드 1장 ATK +500 · 돌파1 부여"},{"id":"LT03","name":"파이어볼","race":"Land","type":"technique","cost":60,"atk":0,"effects":"debuff:1000","desc":"적 1장 ATK -1000"},{"id":"LT04","name":"더블 파이어","race":"Land","type":"technique","cost":110,"atk":0,"effects":"debuff:2000|reaction_cast","desc":"적 1장 ATK -2000 · 리액션: 무료 발동"},{"id":"LT05","name":"파이어 토네이도","race":"Land","type":"technique","cost":140,"atk":0,"effects":"debuff:3000","desc":"적 1장 ATK -3000"},{"id":"OT01","name":"격류","race":"Ocean","type":"technique","cost":150,"atk":0,"effects":"buff_all:1000","desc":"아군 오션 전체 ATK +1000"},{"id":"OT02","name":"생명의 물","race":"Ocean","type":"technique","cost":50,"atk":0,"effects":"buff_one:1000","desc":"아군 오션 1장 ATK +1000"},{"id":"OT03","name":"썰물","race":"Ocean","type":"technique","cost":80,"atk":0,"effects":"move_enemy:B","desc":"상대 A라인 몬스터 1장 B라인 이동"},{"id":"OT04","name":"심해의 부름","race":"Ocean","type":"technique","cost":150,"atk":0,"effects":"sacrifice_me:150","desc":"아군 오션 1장 묘지로 보내 ME +150"},{"id":"OT05","name":"거품","race":"Ocean","type":"technique","cost":75,"atk":0,"effects":"grant_protect","desc":"아군 오션 1장 보호 부여"},{"id":"ST01","name":"순풍","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"buff_all:1000","desc":"아군 스카이 전체 ATK +1000"},{"id":"ST02","name":"섬광","race":"Sky","type":"technique","cost":65,"atk":0,"effects":"buff_speed:500","desc":"아군 스카이 1장 ATK +500 · 고속 부여"},{"id":"ST03","name":"격앙","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"smash_all:1","desc":"아군 스카이 전체 강타 +1"},{"id":"ST04","name":"희생의 날개","race":"Sky","type":"technique","cost":75,"atk":0,"effects":"sacrifice_draw:2","desc":"아군 스카이 1장 묘지로 보내 2장 드로우"},{"id":"ST05","name":"역풍","race":"Sky","type":"technique","cost":100,"atk":0,"effects":"bounce_enemy_A|reaction_cast","desc":"상대 A라인 1장 패로 · 리액션: 무료 발동"},{"id":"XT01","name":"어둠의 공장","race":"Others","type":"technique","cost":100,"atk":0,"effects":"cycle_hand","desc":"패에서 임의의 카드 덱으로 되돌리고 같은 장수 드로우"},{"id":"XT02","name":"칠흑의 망토","race":"Others","type":"technique","cost":45,"atk":0,"effects":"buff_one:500|reaction_to_hand","desc":"아군 아더스 1장 ATK +500 · 리액션: 패로"},{"id":"XT03","name":"화산 분출","race":"Others","type":"technique","cost":75,"atk":0,"effects":"mill_asymmetric:1,1|reaction_to_hand","desc":"양측 덱을 각각 1장 소진 · 리액션: 이 카드를 패에 넣는다"},{"id":"XT04","name":"파괴광선","race":"Others","type":"technique","cost":145,"atk":0,"effects":"destroy_A|reaction_cast","desc":"상대 A라인 몬스터 1장 파괴 · 리액션: 무료 발동"},{"id":"XT05","name":"다른 이들의 분노","race":"Others","type":"technique","cost":230,"atk":0,"effects":"destroy_all|reaction_to_hand","desc":"양측 필드 모든 몬스터 파괴 · 리액션: 패로"},{"id":"LM06","name":"타이거드라고","race":"Land","type":"monster","cost":200,"atk":4000,"effects":"breakthrough|smash:3|on_summon_debuff:2000","tribute":1,"desc":"제물 1 · 돌파 1 · 강타 3 · 소환 시 적 1장 ATK -2000"},{"id":"OM06","name":"해룡 레비아탄","race":"Ocean","type":"monster","cost":200,"atk":4000,"effects":"breakthrough|leviathan_buff:500","tribute":1,"desc":"제물 1 · 돌파 1 · 기동/신속: 패 1장을 버리고 아군 오션 1장 ATK +500 (턴당 1회)"},{"id":"SM06","name":"지휘관 독수리","race":"Sky","type":"monster","cost":200,"atk":3000,"effects":"speed|sky_aura:500","tribute":1,"desc":"제물 1 · 고속 · A라인이면 스카이 전체 ATK +500"},{"id":"XM06","name":"멸망룡 공허","race":"Others","type":"monster","cost":200,"atk":3500,"effects":"on_summon_destroy|reaction_to_hand","tribute":1,"desc":"제물 1 · 소환 시 적 A라인 몬스터 1장 파괴(선택) · 리액션: 패로"},{"id":"V345","name":"줄무늬 치타","race":"Land","type":"monster","cost":50,"atk":1000,"effects":"rush","desc":"러시: 한 턴 최대 2회 기본 행동"},{"id":"V346","name":"박사 앵무새","race":"Sky","type":"monster","cost":75,"atk":1500,"effects":"on_summon_search_sky","desc":"소환 시 덱에서 스카이 기술 1장 패로"},{"id":"V347","name":"티타늄 산호","race":"Ocean","type":"monster","cost":95,"atk":2500,"effects":"cannot_attack|protect","desc":"공격 불가 · 보호"},{"id":"V348","name":"보물 상자","race":"Others","type":"monster","cost":100,"atk":2000,"effects":"on_destroy_te:100","desc":"필드에서 파괴될 때 TE +100"},{"id":"V349","name":"괴력 베어","race":"Land","type":"monster","cost":105,"atk":2500,"effects":"attack_buff:500","desc":"공격 선언 시 자신 ATK +500 (턴 종료까지)"},{"id":"V350","name":"둔한 펭귄","race":"Ocean","type":"monster","cost":85,"atk":2000,"effects":"reaction_deploy:A","desc":"리액션: A라인에 등장"},{"id":"V351","name":"얼티밋 팔콘","race":"Sky","type":"monster","cost":130,"atk":2500,"effects":"smash:2|on_summon_move_any","desc":"강타 2 · 소환 시 필드 몬스터 1장 라인 이동(자신 포함)"},{"id":"V352","name":"만년서리","race":"Others","type":"monster","cost":40,"atk":500,"effects":"quick_send_move_A_B","desc":"기동/신속: 자신을 묘지로 보내 A라인 몬스터 1장 B라인 이동"},{"id":"V353","name":"저돌맹진","race":"Land","type":"technique","cost":50,"atk":0,"effects":"rush_forward","desc":"아군 B라인 랜드 1장 A라인 이동 · 강타 +1"},{"id":"V354","name":"바다의 수호","race":"Ocean","type":"technique","cost":105,"atk":0,"effects":"buff_one_enemy_turn:2000|reaction_to_hand","desc":"상대 턴에만: 아군 오션 1장 ATK +2000 · 리액션: 패로"},{"id":"V355","name":"음속돌파","race":"Sky","type":"technique","cost":80,"atk":0,"effects":"speed_all","desc":"아군 모든 스카이 몬스터 고속 부여"},{"id":"V356","name":"연금술","race":"Others","type":"technique","cost":225,"atk":0,"effects":"alchemy","desc":"아군 아더스 1장 파괴 후 패 몬스터 조건 무시 B 특수 소환 또는 자기 묘지 2장 덱으로"},{"id":"V357","name":"대화재","race":"Land","type":"technique","cost":250,"atk":0,"effects":"inferno:4000","desc":"적 A라인에 총 ATK -4000을 500 단위 배분·동시 적용"},{"id":"V358","name":"방어벽","race":"Ocean","type":"technique","cost":80,"atk":0,"effects":"effect_shield","desc":"이번 턴 아군 1장 상대 몬스터/기술 효과 면역"},{"id":"V359","name":"거품나비","race":"Sky","type":"monster","cost":35,"atk":500,"effects":"quick_negate","desc":"기동/신속: 자신을 묘지로 보내 적 발동형 몬스터 효과 1회 무효 (리액션 제외)"},{"id":"V360","name":"좀비미라","race":"Others","type":"monster","cost":140,"atk":2500,"effects":"breakthrough|smash:2|reaction_to_hand","desc":"돌파1 · 강타2 · 리액션: 패로"},{"id":"V501","name":"헬킹콩","race":"Land","type":"monster","cost":155,"atk":3500,"effects":"smash:2|self_destroy_on_A_to_B","desc":"강타 2 · 이 몬스터가 A→B 이동하면 파괴"},{"id":"V502","name":"물결 고래","race":"Ocean","type":"monster","cost":135,"atk":3000,"effects":"protect","desc":"보호 · 공격 가능"},{"id":"V503","name":"리더 기러기","race":"Sky","type":"monster","cost":75,"atk":1500,"effects":"quick_leader_move","desc":"기동/신속: 자신이 A라인에 있을 때 아군 스카이 1장을 B→A 이동 (턴당 1회)"},{"id":"V504","name":"기억의 기차","race":"Others","type":"monster","cost":135,"atk":2500,"effects":"enemy_monster_immune","desc":"상대 몬스터 효과를 받지 않음 (기술·전투는 영향받음)"},{"id":"OT06","name":"밀물","race":"Ocean","type":"technique","cost":75,"atk":0,"effects":"move_enemy_front|reaction_to_hand","desc":"상대 B라인 몬스터 1장을 A라인으로 이동 · 리액션: 손패로"},{"id":"LM07","name":"돌격 야생마","race":"Land","type":"monster","cost":100,"atk":2000,"effects":"rush","desc":"러시: 한 턴에 기본 행동 2회"},{"id":"LM08","name":"함정 민들레","race":"Land","type":"monster","cost":65,"atk":1500,"effects":"on_destroy_debuff:1000|reaction_deploy:A","desc":"필드에서 파괴되면 적 몬스터 1장 ATK -1000 · 리액션: A라인 특수 소환"},{"id":"OT07","name":"긴급 출항","race":"Ocean","type":"technique","cost":110,"atk":0,"effects":"summon_protect_A","desc":"상대 턴에만: 패의 보호 능력 보유 몬스터 1장을 A라인에 특수 소환 (진행 중인 공격 보호 가능)"},{"id":"SM07","name":"능숙 알바트로스","race":"Sky","type":"monster","cost":65,"atk":1000,"effects":"attack_buff:1000","desc":"공격 선언 시 자신 ATK +1000 (턴 종료까지)"},{"id":"ST07","name":"일석이조","race":"Sky","type":"technique","cost":125,"atk":0,"effects":"summon_small_sky:A|reaction_summon_small_sky:B","desc":"패와 묘지에서 각각 기본 ATK 1000 이하 스카이 몬스터 정확히 1장씩 A라인 특수 소환 (빈 공간 2칸 필수) · 리액션: 같은 조건으로 B라인 특수 소환"},{"id":"XM07","name":"유령 고양이","race":"Others","type":"monster","cost":50,"atk":500,"effects":"stealth","desc":"스텔스: 상대 A라인 몬스터가 있어도 상대 덱 직접 공격 가능"},{"id":"XT07","name":"마녀여왕의 가호","race":"Others","type":"technique","cost":130,"atk":0,"effects":"indestructible","desc":"이번 턴 자신 필드의 몬스터 1장은 모든 파괴에 면역 (ATK 0 이하 포함)"},{"id":"2LM01","name":"황소","race":"Land","type":"monster","cost":70,"atk":1500,"effects":"breakthrough","desc":"돌파 1"},{"id":"2LM02","name":"철갑 코끼리","race":"Land","type":"monster","cost":180,"atk":3500,"effects":"on_attacked_buff:500","desc":"유발: 턴당 1회 상대 공격 대상으로 지정되면 턴 종료까지 자신의 ATK +500"},{"id":"2OM01","name":"청새치","race":"Ocean","type":"monster","cost":80,"atk":2000,"effects":"speed","desc":"고속"},{"id":"2OM02","name":"흉폭한 크라켄","race":"Ocean","type":"monster","cost":175,"atk":3500,"effects":"breakthrough","desc":"돌파 1"},{"id":"2SM01","name":"악랄 알바트로스","race":"Sky","type":"monster","cost":60,"atk":1000,"effects":"smash:2","desc":"강타 2"},{"id":"2SM02","name":"벌새","race":"Sky","type":"monster","cost":175,"atk":1500,"effects":"rush|on_summon_sky_swarm:2","desc":"러시 · 소환 시 덱에서 기본 ATK 1000 이하 스카이 몬스터 최대 2장을 골라 A/B라인 빈 칸에 특수 소환"},{"id":"2XM01","name":"묘지기","race":"Others","type":"monster","cost":80,"atk":2000,"effects":"reaction_grave_tech","desc":"리액션: 묘지의 기술 카드 1장을 골라 패로 회수"},{"id":"2XM02","name":"마녀여왕","race":"Others","type":"monster","cost":185,"atk":2500,"effects":"witch_aura:500|witch_te:50","desc":"지속: B라인에서 아더스 전체 ATK +500 · 유발: 매 턴 종료 시 그 턴 패에서 기술을 발동했다면 자신이 필드에 있을 때 TE +50"}],"decks":{"Land":{"안경 원숭이":1,"줄무늬 치타":3,"돌진 양":2,"함정 민들레":2,"황소":2,"돌파 야생마":2,"돌격 야생마":2,"야수의 왕 사자":1,"헬킹콩":1,"철갑 코끼리":1,"타이거드라고":3,"파이어볼":2,"야수의 심장":2,"더블 파이어":3,"파이어 토네이도":1,"대화재":2},"Ocean":{"흰동가리":3,"보호 가리비":3,"청새치":2,"날랜 상어":1,"티타늄 산호":1,"물결 고래":2,"크라켄":3,"흉폭한 크라켄":2,"해룡 레비아탄":2,"생명의 물":3,"밀물":1,"썰물":1,"방어벽":3,"바다의 수호":2,"격류":1},"Sky":{"거품나비":3,"기관총 거위":3,"악랄 알바트로스":3,"박사 앵무새":3,"얼티밋 팔콘":3,"벌새":3,"지휘관 독수리":3,"역풍":3,"순풍":3,"격앙":2,"일석이조":1},"Others":{"만년서리":1,"유령 고양이":1,"퀸카 인형":3,"묘지기":3,"웃는 광대":1,"보물 상자":1,"최면술 로봇":1,"기억의 기차":1,"좀비미라":2,"마녀여왕":2,"암흑룡":1,"멸망룡 공허":3,"화산 분출":3,"파괴광선":3,"마녀여왕의 가호":1,"연금술":2,"다른 이들의 분노":1}}};
 'use strict';
 const RACE_KO={Land:'랜드',Ocean:'오션',Sky:'스카이',Others:'아더스'};
 const CARDMAP=Object.fromEntries(DATA.cards.map(c=>[c.name,c]));
-const BALANCE_KEY='cardclash_1_balance';
+const BALANCE_KEY='cardclash_2_balance';
 function patchCardNumbers(patches){
   for(const [name,patch] of Object.entries(patches||{})){
     const card=CARDMAP[name];if(!card)continue;
@@ -169,7 +186,7 @@ function showBalanceEditor(){
  if(document.getElementById('modalroot').children.length)return;
  const root=document.getElementById('modalroot'),over=document.createElement('div'),box=document.createElement('div');
  over.className='overlay';box.className='dialog balance-dialog';
- box.style.width='min(840px,100%)'; box.innerHTML='<h2>⚙️ 1.0 실시간 밸런스 연구실</h2><p class="hint">비용·기본 공격력·효과에 포함된 숫자와 후공 보너스를 조정할 수 있어. 저장 즉시 현재 로컬 대전에도 적용되고, 브라우저에 보존돼. 온라인에서는 서버 관리자만 전체 대전에 적용할 수 있어.</p>';
+ box.style.width='min(840px,100%)'; box.innerHTML='<h2>⚙️ 2.0 실시간 밸런스 연구실</h2><p class="hint">비용·기본 공격력·효과에 포함된 숫자와 후공 보너스를 조정할 수 있어. 저장 즉시 현재 로컬 대전에도 적용되고, 브라우저에 보존돼. 온라인에서는 서버 관리자만 전체 대전에 적용할 수 있어.</p>';
  const bRow=document.createElement('label');bRow.className='pick-row';bRow.textContent='후공 첫 턴 추가 에너지 (기본 충전 100에 더함): ';
  const bonus=document.createElement('input');bonus.type='number';bonus.min=0;bonus.max=200;bonus.step=5;bonus.value=DATA.rules.second_player_first_turn_bonus;bonus.style.width='90px';bRow.append(bonus);box.append(bRow);
  const table=document.createElement('div');table.style.maxHeight='48vh';table.style.overflow='auto';
@@ -197,18 +214,18 @@ function showBalanceEditor(){
 
 // A saved deck is the only user-editable game rule data: counts 0-3, sum 25.
 const DEFAULT_DECKS=JSON.parse(JSON.stringify(DATA.decks));
-const CUSTOM_DECK_STORAGE='cardclash_1_72_custom_decks';
+const CUSTOM_DECK_STORAGE='cardclash_2_80_custom_decks';
 function deckCount(d){return Object.values(d).reduce((acc,n)=>acc+n,0)}
 function validDeck(r,d){
  if(!d||typeof d!=='object'||Array.isArray(d))return false;
  const pool=new Set(DATA.cards.map(c=>c.name)); // 혼합 덱 허용: 종족 기술 발동 조건은 여전히 해당 종족 몬스터 필요
- return Object.entries(d).every(([n,v])=>pool.has(n)&&Number.isInteger(v)&&v>=0&&v<=3)&&deckCount(d)===25;
+ return Object.entries(d).every(([n,v])=>pool.has(n)&&Number.isInteger(v)&&v>=0&&v<=3)&&deckCount(d)===DATA.rules.deck_size;
 }
 function canonicalDeck(r,d){
  const clean={};for(const c of DATA.cards)if((d[c.name]||0)>0)clean[c.name]=d[c.name];return clean;
 }
 function loadSavedDecks(){
- try{const saved=JSON.parse(localStorage.getItem(CUSTOM_DECK_STORAGE)||localStorage.getItem('cardclash_v5_custom_decks_1'));
+ try{const saved=JSON.parse(localStorage.getItem(CUSTOM_DECK_STORAGE));
    if(saved?.Land?.['질풍마']){saved.Land['돌파 야생마']=(saved.Land['돌파 야생마']||0)+saved.Land['질풍마'];delete saved.Land['질풍마'];}
    if(saved&&Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,saved[r])))
      for(const r of Object.keys(DEFAULT_DECKS))DATA.decks[r]=canonicalDeck(r,saved[r]);
@@ -259,10 +276,16 @@ function shuffle(a){for(let n=a.length-1;n>0;n--){let k=Math.floor(rng()*(n+1));
 function locate(id){for(let i=0;i<2;i++)for(let z of ['a','b']){let u=P(i)[z].find(x=>x.uid===id);if(u)return {i,z,u}}return null}
 function field(i){return [...P(i).a,...P(i).b]}
 function ofRace(i,r){return field(i).some(x=>CARDMAP[x.name].race===r)}
-function makeUnit(name){return {uid:++uid,name,bonus:0,smashPlus:0,tempSpeed:false,tempProtect:false,tempBreak:false,shield:false,indestructible:false,actions:0,quickUsed:false,leviUsed:false,activated:false,protectUsed:false,leaderUsed:false}}
+function makeUnit(name){return {uid:++uid,name,mods:[],bonus:0,elephantUsed:false,smashPlus:0,tempSpeed:false,tempProtect:false,tempBreak:false,shield:false,indestructible:false,actions:0,quickUsed:false,leviUsed:false,activated:false,protectUsed:false,leaderUsed:false}}
 function deploy(i,name,z){if(P(i)[z].length>=5)return null;let u=makeUnit(name);P(i)[z].push(u);return u}
 function aura(i){return P(i).a.filter(x=>x.name==='지휘관 독수리').length*number(CARDMAP['지휘관 독수리'],'sky_aura')}
-function atk(u){let l=locate(u.uid);return CARDMAP[u.name].atk+u.bonus+(l&&CARDMAP[u.name].race==='Sky'?aura(l.i):0)}
+function witchAura(i){return P(i).b.filter(x=>x.name==='마녀여왕').length*number(CARDMAP['마녀여왕'],'witch_aura')}
+function changeATK(u,delta,source){u.bonus+=delta;(u.mods||(u.mods=[])).push({delta,source});}
+function currentATKParts(u){let l=locate(u.uid),parts=[...(u.mods||[])];
+ if(l){if(CARDMAP[u.name].race==='Sky')for(let x of P(l.i).a.filter(x=>x.name==='지휘관 독수리'))parts.push({delta:number(CARDMAP['지휘관 독수리'],'sky_aura'),source:'지휘관 독수리 (지속)'});
+ if(CARDMAP[u.name].race==='Others')for(let x of P(l.i).b.filter(x=>x.name==='마녀여왕'))parts.push({delta:number(CARDMAP['마녀여왕'],'witch_aura'),source:'마녀여왕 (지속)'});}
+ return parts;}
+function atk(u){let l=locate(u.uid);return CARDMAP[u.name].atk+u.bonus+(l&&CARDMAP[u.name].race==='Sky'?aura(l.i):0)+(l&&CARDMAP[u.name].race==='Others'?witchAura(l.i):0)}
 function speed(u){return has(CARDMAP[u.name],'speed')||u.tempSpeed}
 function protect(u){return has(CARDMAP[u.name],'protect')||u.tempProtect}
 function breakthrough(u){return has(CARDMAP[u.name],'breakthrough')||u.tempBreak}
@@ -283,20 +306,37 @@ function checkDeck(reason){let dead=[0,1].filter(i=>P(i).deck.length===0);if(dea
 function draw(i,n=1){for(let k=0;k<n&&!g.winner;k++){if(!P(i).deck.length){checkDeck('드로우 불가');return}let x=P(i).deck.pop();P(i).hand.push(x);log(`${nm(P(i).race)} 드로우: 1장`);if(checkDeck('드로우'))return}}
 function mill(i,n){let m=[];for(let k=0;k<n;k++){if(!P(i).deck.length)break;let x=P(i).deck.pop();P(i).grave.push(x);m.push(x)}log(`${nm(P(i).race)} 덱 ${m.length}장 소진: ${m.join(', ')||'없음'}`);return m}
 function queueReactions(i,m){for(let x of m)for(let tag of eff(CARDMAP[x]).filter(y=>y.startsWith('reaction_')))g.reactions.push({owner:i,name:x,tag})}
-function millOne(i,n){let m=mill(i,n);if(!checkDeck('효과·전투'))queueReactions(i,m)}
+let deckEffects={};
+function millOne(i,n){deckEffects[i]={n,until:Date.now()+750};let m=mill(i,n);if(!checkDeck('효과·전투'))queueReactions(i,m)}
 function millBoth(n){let a=mill(0,n),b=mill(1,n);if(!checkDeck('동시 덱 소진')){queueReactions(0,a);queueReactions(1,b)}}
-function turnStart(){if(g.winner)return;g.turn++;let i=g.active,q=P(i);q.summons=0;for(let j=0;j<2;j++)for(let u of field(j)){u.quickUsed=false;u.leviUsed=false;u.leaderUsed=false;u.protectUsed=false}for(let u of field(i)){u.actions=0;u.activated=false}log(`▶ ${g.turn}턴 ${nm(q.race)} 차례`);draw(i);if(!g.winner){let n=g.turn===2?100+DATA.rules.second_player_first_turn_bonus:100;q.me=Math.min(300,q.me+n);q.te=Math.min(300,q.te+n);log(`에너지 충전 +${n}/${n} → ME ${q.me} / TE ${q.te}`)}sel=null;refresh()}
-function newGame(){toggleMobileMenu(false);undoHistory=[];updateUndoButtons();let races=[$('race0').value,$('race1').value],seed=Number($('seed').value)||42;uid=0;stackUid=0;g={rng:seed>>>0,turn:0,active:0,players:races.map(r=>({race:r,deck:[],hand:[],grave:[],a:[],b:[],me:0,te:0,summons:0})),winner:null,logs:[],priority:null,passes:0,stack:[],attack:null,reactions:[],triggers:[]};for(let i=0;i<2;i++){let q=P(i),d=(window.__onlineDecks&&window.__onlineDecks[i])||DATA.decks[q.race];for(let [name,count] of Object.entries(d))for(let k=0;k<count;k++)q.deck.push(name);shuffle(q.deck);for(let k=0;k<5;k++)q.hand.push(q.deck.pop())}log('새 대전 시작 — 양측 시작 패 5장');turnStart()}
-function endTurn(){if(!g||g.winner)return error('진행 중인 게임이 없어.');if(g.priority!==null||g.stack.length||g.reactions.length||g.triggers.length||g.attack)return error('미해결 전투 또는 효과가 있어.');checkpoint('턴 종료 전');for(let i=0;i<2;i++)for(let u of field(i)){u.bonus=0;u.smashPlus=0;u.tempSpeed=false;u.tempProtect=false;u.tempBreak=false;u.shield=false;u.indestructible=false}enforceZero();g.active=other(g.active);turnStart()}
+function turnStart(){if(g.winner)return;g.turn++;let i=g.active,q=P(i);q.summons=0;g.playedTechThisTurn=[false,false];for(let j=0;j<2;j++)for(let u of field(j)){u.quickUsed=false;u.leviUsed=false;u.leaderUsed=false;u.protectUsed=false;u.elephantUsed=false}for(let u of field(i)){u.actions=0;u.activated=false}log(`▶ ${g.turn}턴 ${nm(q.race)} 차례`);draw(i);if(!g.winner){let n=g.turn===2?100+DATA.rules.second_player_first_turn_bonus:100;q.me=Math.min(300,q.me+n);q.te=Math.min(300,q.te+n);log(`에너지 충전 +${n}/${n} → ME ${q.me} / TE ${q.te}`)}sel=null;refresh()}
+function newGame(){toggleMobileMenu(false);undoHistory=[];updateUndoButtons();let races=[$('race0').value,$('race1').value],seed=Number($('seed').value)||42;uid=0;stackUid=0;g={rng:seed>>>0,turn:0,active:0,players:races.map(r=>({race:r,deck:[],hand:[],grave:[],a:[],b:[],me:0,te:0,summons:0})),winner:null,logs:[],priority:null,passes:0,stack:[],attack:null,reactions:[],triggers:[],endingTurn:false,playedTechThisTurn:[false,false]};for(let i=0;i<2;i++){let q=P(i),d=(window.__onlineDecks&&window.__onlineDecks[i])||DATA.decks[q.race];for(let [name,count] of Object.entries(d))for(let k=0;k<count;k++)q.deck.push(name);shuffle(q.deck);for(let k=0;k<5;k++)q.hand.push(q.deck.pop())}log('새 대전 시작 — 양측 시작 패 5장');turnStart()}
+function completeEndTurn(){g.endingTurn=false;for(let i=0;i<2;i++)for(let u of field(i)){u.bonus=0;u.mods=[];u.smashPlus=0;u.tempSpeed=false;u.tempProtect=false;u.tempBreak=false;u.shield=false;u.indestructible=false}enforceZero();if(!g.winner){g.active=other(g.active);turnStart()}}
+function endTurn(){if(!g||g.winner)return error('진행 중인 게임이 없어.');if(g.endingTurn||g.priority!==null||g.stack.length||g.reactions.length||g.triggers.length||g.attack)return error('미해결 전투 또는 효과가 있어.');checkpoint('턴 종료 전');g.endingTurn=true;
+ for(let i=0;i<2;i++)if(g.playedTechThisTurn?.[i])for(let u of field(i))if(u.name==='마녀여왕')g.triggers.push({type:'monster',name:'@witchEnd',owner:i,source:u.uid,sourceName:'마녀여왕',text:'마녀여왕 — 턴 종료 시 TE +50'});
+ if(!g.triggers.length){completeEndTurn();refresh()}else{refresh();drive()}}
+
 function selectedCard(){if(!g||!sel)return null;if(sel.zone==='hand'){let name=P(sel.i).hand[sel.id];return name?{i:sel.i,name,c:CARDMAP[name],handIndex:sel.id}:null}let x=locate(sel.id);return x?{i:x.i,name:x.u.name,c:CARDMAP[x.u.name],u:x.u,z:x.z}:null}
 function selectCard(i,z,id){sel={i,zone:z,id};refresh()}
-function mainAllowed(i){return g&&!g.winner&&g.priority===null&&!g.stack.length&&!g.attack&&!g.reactions.length&&!g.triggers.length&&g.active===i}
+function mainAllowed(i){return g&&!g.winner&&g.priority===null&&!g.stack.length&&!g.attack&&!g.reactions.length&&!g.triggers.length&&g.active===i&&!g.endingTurn}
 function present(i,zone,id){let q=P(i);if(zone==='hand')return q.hand[id];return locate(id)?.u?.name}
 function moveUnit(id,z,tag='효과'){let l=locate(id);if(!l||l.z===z||P(l.i)[z].length>=5)return false;P(l.i)[l.z].splice(P(l.i)[l.z].indexOf(l.u),1);P(l.i)[z].push(l.u);log(`${l.u.name} ${l.z.toUpperCase()}→${z.toUpperCase()} (${tag})`);if(z==='b'&&has(CARDMAP[l.u.name],'self_destroy_on_A_to_B')){log(`${l.u.name} A→B 이동 페널티 발동`);destroy(id)}return true}
 function opts(t,i){let k=eff(t).find(x=>!x.startsWith('reaction_'))?.split(':')[0];let own=field(i).filter(x=>CARDMAP[x.name].race===t.race),en=field(other(i));switch(k){case 'buff_one':case 'buff_speed':case 'buff_break':case 'buff_one_enemy_turn':case 'grant_protect':case 'sacrifice_me':case 'sacrifice_draw':return own.filter(u=>!u.indestructible);case 'effect_shield':case 'indestructible':return field(i);case 'debuff':case 'destroy_any':return en;case 'destroy_A':return P(other(i)).a;case 'move_enemy':return P(other(i)).b.length<5?P(other(i)).a:[];case 'move_enemy_front':return P(other(i)).a.length<5?P(other(i)).b:[];case 'bounce_enemy_A':return P(other(i)).a;case 'rush_forward':return P(i).a.length<5?P(i).b.filter(x=>CARDMAP[x.name].race==='Land'):[];case 'inferno':return P(other(i)).a;case 'alchemy':return own.filter(u=>!u.indestructible);default:return null}}
+function skyLow(n){let c=CARDMAP[n];return c?.type==='monster'&&c.race==='Sky'&&c.atk<=1000}
+function skyPairReady(i,zone){return P(i)[zone].length<=3&&P(i).hand.some(skyLow)&&P(i).grave.some(skyLow)}
+async function summonSkyPair(i,zone,handName,graveName){
+ if(!skyPairReady(i,zone)||!skyLow(handName)||!skyLow(graveName))return false;
+ let hi=P(i).hand.indexOf(handName),gi=P(i).grave.indexOf(graveName);
+ if(hi<0||gi<0)return false;
+ P(i).hand.splice(hi,1);P(i).grave.splice(gi,1);
+ let first=deploy(i,handName,zone),second=deploy(i,graveName,zone);
+ if(!first||!second)throw Error('일석이조: 원자적 소환 공간 검사 실패');
+ log(`일석이조: 패 ${handName} + 묘지 ${graveName} → ${zone.toUpperCase()}라인 2장 특수 소환`);
+ await onSummon(i,first);if(!g.winner)await onSummon(i,second);return true;
+}
 function canCast(i,name){if(!g||g.winner)return false;let c=CARDMAP[name];if(!c||c.type!=='technique'||P(i).te<c.cost||!ofRace(i,c.race))return false;if((name==='바다의 수호'||name==='긴급 출항')&&g.active===i)return false;
  if(name==='긴급 출항'&&(!P(i).hand.some(n=>CARDMAP[n]?.type==='monster'&&has(CARDMAP[n],'protect'))||P(i).a.length>=5))return false;
- if(name==='일석이조'&&(P(i).a.length>=5||!P(i).hand.some(n=>CARDMAP[n]?.race==='Sky'&&CARDMAP[n].type==='monster'&&CARDMAP[n].atk<=1000)))return false;
+ if(name==='일석이조'&&(!skyPairReady(i,'a')))return false;
  let os=opts(c,i);if(os!==null&&!os.length)return false;if(name==='연금술'&&!P(i).hand.some(n=>CARDMAP[n].type==='monster')&&P(i).grave.length<2)return false;
  if(['심해의 부름','희생의 날개','연금술'].includes(name)&&os!==null&&!os.some(u=>!u.indestructible))return false;return true}
 function eligibleAbilities(i,u){if(!g||g.winner)return [];let main=mainAllowed(i),window=g.priority===i,ret=[];if(!main&&!window)return [];
@@ -308,6 +348,7 @@ function eligibleAbilities(i,u){if(!g||g.winner)return [];let main=mainAllowed(i
  if(u.name==='리더 기러기'&&!u.leaderUsed&&locate(u.uid)?.z==='a'&&P(i).a.length<5&&P(i).b.some(x=>CARDMAP[x.name].race==='Sky'))ret.push('leader');
  return ret}
 function isPlayable(i){if(!g||g.winner)return false;return P(i).hand.some(x=>canCast(i,x))||field(i).some(u=>eligibleAbilities(i,u).length>0)}
+function stackLabel(x){return x.text||x.sourceName||({'@on':'소환 효과','@box':'보물 상자','@flower':'함정 민들레','@active':'기동 효과','@bear':'공격 강화','@witchEnd':'마녀여왕','@elephant':'철갑 코끼리'})[x.name]||x.name}
 function addStack(entry){g.stack.push({id:++stackUid,canceled:false,...entry})}
 function openPriority(i){g.priority=i;g.passes=0;log(`우선권 → ${nm(P(i).race)}`)}
 async function choice(title,items,fmt=x=>x.name||String(x),allowCancel=true){if(!items.length)return null;return new Promise(resolve=>{let root=$('modalroot'),overlay=document.createElement('div');overlay.className='overlay';let box=document.createElement('div');box.className='dialog';box.innerHTML='<h2></h2><div class="choices"></div>';box.querySelector('h2').textContent=title;for(let x of items){let b=document.createElement('button');b.textContent=fmt(x);b.onclick=()=>{root.innerHTML='';resolve(x)};box.querySelector('.choices').append(b)}if(allowCancel){let b=document.createElement('button');b.className='close';b.textContent='취소';b.onclick=()=>{root.innerHTML='';resolve(null)};box.append(b)}overlay.append(box);root.innerHTML='';root.append(overlay)})}
@@ -332,21 +373,28 @@ async function summon(){window.__promptOwner=sel?.i;let t=selectedCard();if(!t||
 async function onSummon(i,u){window.__promptOwner=i;let c=CARDMAP[u.name],t=null,kind=null;let enemy=field(other(i));if(has(c,'on_summon_mill_both'))kind='mill';if(has(c,'on_summon_te'))kind='te';if(has(c,'on_summon_debuff')&&enemy.length){let x=await choice('타이거드라고: 공격력 -2000 대상',enemy,u=>`${u.name} · ATK ${atk(u)}`);if(x){kind='debuff';t=x.uid}}
 if(has(c,'on_summon_destroy')&&P(other(i)).a.length){let x=await choice('멸망룡 공허: 파괴할 적 A라인 몬스터 (선택 사항)',P(other(i)).a);if(x){kind='destroy';t=x.uid}}
 if(has(c,'on_summon_search_sky')&&P(i).deck.some(n=>CARDMAP[n].race==='Sky'&&CARDMAP[n].type==='technique'))kind='search';
+if(has(c,'on_summon_sky_swarm'))kind='sky_swarm';
 if(has(c,'on_summon_move_any')){let a=[...field(0),...field(1)].filter(x=>{let l=locate(x.uid);return P(l.i)[l.z==='a'?'b':'a'].length<5});if(a.length){let x=await choice('얼티밋 팔콘: 이동할 몬스터 (자신 포함, 선택 가능)',a);if(x){kind='move';t=x.uid}}}
-if(kind){addStack({type:'monster',owner:i,name:'@on',kind,source:u.uid,target:t});log(`${u.name} 소환 시 효과 발동 (${kind})`);openPriority(other(i))}}
+if(kind){addStack({type:'monster',owner:i,name:'@on',kind,source:u.uid,sourceName:u.name,target:t,text:`${u.name} — 소환 시 ${({mill:'양측 덱 소진',te:'TE 획득',debuff:'ATK 감소',destroy:'몬스터 파괴',search:'기술 검색',move:'라인 이동',sky_swarm:'스카이 덱 특수 소환'})[kind]||kind}`});log(`${u.name} 소환 시 효과 발동 (${kind})`);openPriority(other(i))}}
 function move(){let t=selectedCard();if(!t||!t.u||!mainAllowed(t.i))return error('자기 턴 아군 몬스터를 선택해.');let lim=has(t.c,'rush')?2:1;if(t.u.actions>=lim)return error('이 몬스터는 이번 턴 행동을 모두 사용했어.');let z=t.z==='a'?'b':'a';if(P(t.i)[z].length>=5)return error('이동할 라인에 빈자리가 없어.');checkpoint(`${t.name} 이동 전`);if(!moveUnit(t.u.uid,z,'기본 이동'))return error('이동할 라인에 빈자리가 없어.');t.u.actions++;refresh()}
-async function attack(){window.__promptOwner=sel?.i;let t=selectedCard();if(!t||!t.u||!mainAllowed(t.i)||t.z!=='a')return error('자기 A라인의 공격할 몬스터를 골라줘.');if(g.turn===1)return error('선공 첫 턴에는 공격할 수 없어.');if(has(t.c,'cannot_attack'))return error('이 몬스터는 공격할 수 없어.');let lim=has(t.c,'rush')?2:1;if(t.u.actions>=lim)return error('이 몬스터는 이번 턴 행동을 모두 사용했어.');let opp=P(other(t.i)).a;let isStealth=has(t.c,'stealth');let options=isStealth?[{name:'🎯 상대 덱 직접 공격 (스텔스)',uid:null},...opp]:opp;let victim=options.length?await choice('공격할 대상 선택',options):null;if(options.length&&!victim)return;checkpoint(`${t.name} 공격 선언 전`);t.u.actions++;g.attack={owner:t.i,attacker:t.u.uid,target:victim?victim.uid:null};log(`${t.name} → ${victim?victim.name:'상대 덱'} 공격 선언`);if(has(t.c,'attack_buff')){addStack({type:'monster',owner:t.i,name:'@bear',source:t.u.uid});log(`${t.name} 공격 시 강화 효과 발동`)}openPriority(other(t.i));refresh();await drive()}
+async function attack(){window.__promptOwner=sel?.i;let t=selectedCard();if(!t||!t.u||!mainAllowed(t.i)||t.z!=='a')return error('자기 A라인의 공격할 몬스터를 골라줘.');if(g.turn===1)return error('선공 첫 턴에는 공격할 수 없어.');if(has(t.c,'cannot_attack'))return error('이 몬스터는 공격할 수 없어.');let lim=has(t.c,'rush')?2:1;if(t.u.actions>=lim)return error('이 몬스터는 이번 턴 행동을 모두 사용했어.');let opp=P(other(t.i)).a;let isStealth=has(t.c,'stealth');let options=isStealth?[{name:'🎯 상대 덱 직접 공격 (스텔스)',uid:null},...opp]:opp;let victim=options.length?await choice('공격할 대상 선택',options):null;if(options.length&&!victim)return;checkpoint(`${t.name} 공격 선언 전`);t.u.actions++;g.attack={owner:t.i,attacker:t.u.uid,target:victim?victim.uid:null};
+if(victim&&victim.name==='철갑 코끼리'){
+ let defender=locate(victim.uid)?.u;
+ if(defender&&!defender.elephantUsed){defender.elephantUsed=true;g.triggers.push({type:'monster',owner:other(t.i),name:'@elephant',source:victim.uid,sourceName:'철갑 코끼리',text:'철갑 코끼리 — 공격 대상으로 지정되어 ATK +500'})}}
+log(`${t.name} → ${victim?victim.name:'상대 덱'} 공격 선언`);if(has(t.c,'attack_buff')){addStack({type:'monster',owner:t.i,name:'@bear',source:t.u.uid,sourceName:t.name,text:`${t.name} — 공격 시 ATK 강화`});log(`${t.name} 공격 시 강화 효과 발동`)}openPriority(other(t.i));refresh();await drive()}
 async function cast(){window.__promptOwner=sel?.i;let t=selectedCard();if(!t||t.handIndex===undefined||t.c.type!=='technique'||!g)return error('패의 기술 카드를 선택해.');let i=t.i;if(g.priority!==null?g.priority!==i:!mainAllowed(i))return error('이 플레이어에게 우선권이 없어.');if(!canCast(i,t.name))return error('TE·종족 조건·발동 시점 또는 대상 조건을 확인해.');let target=t.name==='대화재'?undefined:await chooseTarget(t.c,i);if(target===null)return;let extra={};if(t.name==='대화재'){let a=await allocation(i);if(!a)return;extra.alloc=a}
 if(t.name==='긴급 출항'){
  let items=P(i).hand.map((n,j)=>({name:n,j})).filter(x=>CARDMAP[x.name]?.type==='monster'&&has(CARDMAP[x.name],'protect'));
  let x=await choice('🚢 긴급 출항: A라인에 소환할 보호 몬스터',items,y=>y.name);if(!x)return;extra.handName=x.name;
 }
 if(t.name==='일석이조'){
- let available=P(i).hand.map((n,j)=>({name:n,j})).filter(x=>CARDMAP[x.name]?.type==='monster'&&CARDMAP[x.name].race==='Sky'&&CARDMAP[x.name].atk<=1000);
- let picked=await chooseUpTo('🦅 일석이조: A라인에 소환할 스카이 몬스터 (최대 2장)',available,Math.min(2,5-P(i).a.length));if(!picked)return;extra.summonNames=picked.map(x=>x.name);
+ if(!skyPairReady(i,'a'))return error('일석이조: 패·묘지 대상 각각 1장과 A라인 빈 공간 2칸이 필요해.');
+ let hand=await choice('🪽 일석이조 — 패의 스카이 몬스터 1장',P(i).hand.filter(skyLow).map(n=>({name:n})));if(!hand)return;
+ let grave=await choice('🪽 일석이조 — 묘지의 스카이 몬스터 1장',P(i).grave.filter(skyLow).map(n=>({name:n})));if(!grave)return;
+ extra.handName=hand.name;extra.graveName=grave.name;
 }
 if(t.name==='연금술'){let handmon=P(i).hand.map((n,j)=>({n,j})).filter(x=>CARDMAP[x.n].type==='monster');let modes=[];if(handmon.length)modes.push({id:'summon',name:'패의 몬스터 B라인 특수 소환'});if(P(i).grave.length>=2)modes.push({id:'recover',name:'자신의 묘지 2장 덱에 섞기'});let m=await choice('연금술: 효과 선택',modes);if(!m)return;extra.mode=m.id;if(m.id==='summon'){let x=await choice('특수 소환할 패 몬스터 선택',handmon,y=>y.n);if(!x)return;extra.handName=x.n}else{let own=P(i).grave.map((n,j)=>({name:n,j})),x=await chooseMany('연금술: 덱으로 회수할 묘지 카드 정확히 2장',own,2);if(!x)return;extra.recover=x.map(v=>v.j)}}
-checkpoint(`${t.name} 발동 전`);P(i).hand.splice(t.handIndex,1);P(i).te-=t.c.cost;log(`${t.name} 발동 (TE -${t.c.cost})`);addStack({type:'technique',owner:i,name:t.name,target,...extra});sel=null;openPriority(other(i));refresh();await drive()}
+checkpoint(`${t.name} 발동 전`);P(i).hand.splice(t.handIndex,1);P(i).te-=t.c.cost;log(`${t.name} 발동 (TE -${t.c.cost})`);g.playedTechThisTurn[i]=true;addStack({type:'technique',owner:i,name:t.name,target,...extra});sel=null;openPriority(other(i));refresh();await drive()}
 async function activate(){window.__promptOwner=sel?.i;let t=selectedCard();if(!t||!t.u)return error('필드의 몬스터를 선택해.');let a=eligibleAbilities(t.i,t.u);if(!a.length)return error('이 시점에 발동 가능한 기동 능력이 없어.');let id=a[0],i=t.i,source=t.u.uid,target=null,extra={};
 if(id==='goose'){let x=await choice('기관총 거위: 상대 A라인 대상',P(other(i)).a);if(!x)return;checkpoint(`${t.name} 기동 전`);target=x.uid;t.u.quickUsed=true}
 if(id==='frost'){let all=[...P(0).a,...P(1).a].filter(x=>{let l=locate(x.uid);return P(l.i).b.length<5});let x=await choice('만년서리: A→B 이동시킬 몬스터',all);if(!x)return;checkpoint(`${t.name} 기동 전`);target=x.uid;if(!discardField(source,'send'))return error('가호 때문에 비용으로 파괴할 수 없어.')}
@@ -354,18 +402,20 @@ if(id==='butterfly'){let s=g.stack.filter(x=>x.type==='monster'&&x.owner!==i&&!x
 if(id==='hypnosis'){let all=field(other(i)).filter(x=>{let l=locate(x.uid);return P(l.i)[l.z==='a'?'b':'a'].length<5});let x=await choice('최면술 로봇: 대상 몬스터',all);if(!x)return;checkpoint(`${t.name} 기동 전`);target=x.uid;t.u.activated=true}
 if(id==='leader'){let targets=P(i).b.filter(x=>CARDMAP[x.name].race==='Sky');let x=await choice('리더 기러기: A라인으로 전진할 아군 스카이',targets);if(!x)return;checkpoint(`${t.name} 기동 전`);target=x.uid;t.u.leaderUsed=true}
 if(id==='levi'){let h=P(i).hand.map((n,j)=>({name:n,j})),x=await choice('레비아탄: 버릴 패 1장',h),targets=field(i).filter(x=>CARDMAP[x.name].race==='Ocean');if(!x)return;let y=await choice('레비아탄: ATK +500 아군 오션',targets);if(!y)return;checkpoint(`${t.name} 기동 전`);P(i).hand.splice(x.j,1);P(i).grave.push(x.name);target=y.uid;t.u.leviUsed=true}
-addStack({type:'monster',owner:i,name:'@active',kind:id,source,target,...extra,text:{goose:'기관총 거위 지원사격',frost:'만년서리 A→B',butterfly:'거품나비 발동 무효',hypnosis:'최면술 로봇 기동',levi:'레비아탄 강화',leader:'리더 기러기 아군 전진'}[id]});log(`${t.name} 기동 효과 (${id})`);openPriority(other(i));sel=null;refresh();await drive()}
+addStack({type:'monster',owner:i,name:'@active',kind:id,source,sourceName:t.name,target,...extra,text:{goose:'기관총 거위 지원사격',frost:'만년서리 A→B',butterfly:'거품나비 발동 무효',hypnosis:'최면술 로봇 기동',levi:'레비아탄 강화',leader:'리더 기러기 아군 전진'}[id]});log(`${t.name} 기동 효과 (${id})`);openPriority(other(i));sel=null;refresh();await drive()}
 async function pass(){if(!g||g.priority===null)return error('현재 대응 우선권이 없어.');checkpoint('우선권 패스 전');log(`${nm(P(g.priority).race)} 패스`);g.passes++;if(g.passes>=2)g.priority=null;else g.priority=other(g.priority);refresh();await drive()}
 async function oneReaction(){let q=g.reactions;if(!q.length)return;let oi=[...new Set(q.map(x=>x.owner))].sort((a,b)=>(a===g.active?-1:b===g.active?1:0));let options=q.filter(x=>x.owner===oi[0]);window.__promptOwner=oi[0];let r=options.length>1?await choice('리액션 처리 순서 선택',options,x=>x.name+' · '+x.tag,false):options[0];if(!r)return;g.reactions.splice(g.reactions.indexOf(r),1);let owner=r.owner;window.__promptOwner=owner;let grave=P(owner).grave,idx=grave.indexOf(r.name);if(idx<0)return;log(`✨ ${r.name} 리액션`);if(r.tag==='reaction_to_hand'){grave.splice(idx,1);P(owner).hand.push(r.name);return}
 if(r.tag.startsWith('reaction_deploy:')){let z=r.tag.split(':')[1].toLowerCase();if(P(owner)[z].length>=5){log('리액션 소환 실패: 라인 가득 참');return}grave.splice(idx,1);let u=deploy(owner,r.name,z);log(`${r.name} 리액션 특수 소환 → ${z.toUpperCase()}라인`);await onSummon(owner,u);return}
+if(r.tag==='reaction_grave_tech'){
+ let choices=P(owner).grave.filter(n=>CARDMAP[n]?.type==='technique');if(!choices.length){log('묘지기: 회수할 기술 없음');return}
+ let chosen=await choice('🪦 묘지기 — 묘지 기술 1장 회수',choices.map(name=>({name})),x=>x.name,false);
+ if(chosen){let at=P(owner).grave.indexOf(chosen.name);if(at>=0){P(owner).grave.splice(at,1);P(owner).hand.push(chosen.name);log(`묘지기 리액션: ${chosen.name} 패로 회수`)}}return;
+}
 if(r.tag.startsWith('reaction_summon_small_sky:')){
- let z=r.tag.split(':')[1].toLowerCase();let slots=5-P(owner)[z].length;
- let items=P(owner).hand.map((n,j)=>({name:n,j})).filter(x=>CARDMAP[x.name]?.race==='Sky'&&CARDMAP[x.name].type==='monster'&&CARDMAP[x.name].atk<=1000);
- if(!slots||!items.length){log('일석이조 리액션: 소환 가능한 몬스터/공간 없음');return}
- let picked=await chooseUpTo('✨ 일석이조 리액션: B라인 스카이 특수 소환 (최대 2장)',items,Math.min(2,slots),1);
- if(!picked){log('일석이조 리액션: 소환하지 않음');return}
- grave.splice(idx,1);
- for(let x of picked){let k=P(owner).hand.indexOf(x.name);if(k<0||P(owner)[z].length>=5)continue;P(owner).hand.splice(k,1);let u=deploy(owner,x.name,z);log(`일석이조 리액션: ${x.name} ${z.toUpperCase()}라인 특수 소환`);await onSummon(owner,u)}
+ let zone='b';if(!skyPairReady(owner,zone)){log('일석이조 리액션 실패: 패/묘지 대상 또는 B라인 공간 2칸 부족');return}
+ let h=await choice('✨ 일석이조 리액션 — 패의 몬스터 1장',P(owner).hand.filter(skyLow).map(name=>({name})),x=>x.name,false);
+ let gr=await choice('✨ 일석이조 리액션 — 묘지의 몬스터 1장',P(owner).grave.filter(skyLow).map(name=>({name})),x=>x.name,false);
+ if(h&&gr){if(!await summonSkyPair(owner,zone,h.name,gr.name))log('일석이조 리액션 해결 실패: 조건 재검사 불충족')}
  return;
 }
 if(r.tag==='reaction_cast'){let c=CARDMAP[r.name],os=opts(c,owner);if(os!==null&&!os.length){log(`${r.name} 리액션 대상 없음 — 불발`);return}let target=await chooseTarget(c,owner);if(target===null)return;grave.splice(idx,1);addStack({type:'technique',owner,name:r.name,target,reaction:true});log(`${r.name} 리액션 기술 무료 발동`);openPriority(other(owner))}}
@@ -375,40 +425,67 @@ async function drive(){if(processing||!g||g.winner)return;processing=true;try{le
  if(g.reactions.length){await oneReaction();continue}
  if(g.stack.length){let item=g.stack.pop();if(item.canceled){log(`${item.text||item.name} 발동 무효`);if(item.type==='technique')P(item.owner).grave.push(item.name)}else await resolve(item);continue}
  if(g.attack){await resolveCombat();continue}break}
+ if(g.endingTurn&&!g.winner&&g.priority===null&&!g.stack.length&&!g.triggers.length&&!g.reactions.length&&!g.attack)completeEndTurn();
  if(safety>=400)log('안전 제한: 처리 횟수 초과');}catch(e){console.error(e);error('처리 오류: '+e.message)}finally{processing=false;refresh()}}
 async function resolve(entry){window.__promptOwner=entry.owner;let {owner:i,name,target}=entry,c=CARDMAP[name],l=target===undefined?null:locate(target),opp=other(i);
  if(entry.type==='monster'){
+ if(name==='@witchEnd'){
+ let s=locate(entry.source);if(s&&s.i===i&&s.u.name==='마녀여왕'){
+ let n=number(CARDMAP['마녀여왕'],'witch_te');P(i).te=Math.min(300,P(i).te+n);log(`마녀여왕: 턴 종료 TE +${n}`)}return}
+ if(name==='@elephant'){
+ let s=locate(entry.source);if(s&&s.u.name==='철갑 코끼리'){
+ let n=number(CARDMAP['철갑 코끼리'],'on_attacked_buff');changeATK(s.u,n,'철갑 코끼리');log(`철갑 코끼리: 공격 대상 지정 ATK +${n}`)}return}
  if(name==='@box'){P(i).te=Math.min(300,P(i).te+number(CARDMAP['보물 상자'],'on_destroy_te'));log('보물 상자 파괴 유발: TE +' + number(CARDMAP['보물 상자'],'on_destroy_te'));return}
  if(name==='@flower'){
   let enemy=field(opp);if(!enemy.length)return;
   let x=await choice('🌼 함정 민들레: ATK -1000 적용할 적 몬스터',enemy,u=>`${u.name} (ATK ${atk(u)})`,false);
   let chosen=x&&locate(x.uid);if(chosen&&chosen.i===opp&&!shielded(entry,x.uid)){
-   let amount=number(CARDMAP['함정 민들레'],'on_destroy_debuff');chosen.u.bonus-=amount;log(`함정 민들레: ${chosen.u.name} ATK -${amount}`);enforceZero()
+   let amount=number(CARDMAP['함정 민들레'],'on_destroy_debuff');changeATK(chosen.u,-amount,'함정 민들레');log(`함정 민들레: ${chosen.u.name} ATK -${amount}`);enforceZero()
   }return
  }
- if(name==='@bear'){let source=locate(entry.source);if(source){let value=number(CARDMAP[source.u.name],'attack_buff');source.u.bonus+=value;log(`${source.u.name} 공격 시 ATK +${value}`)}return}
+ if(name==='@bear'){let source=locate(entry.source);if(source){let value=number(CARDMAP[source.u.name],'attack_buff');changeATK(source.u,value,source.u.name);log(`${source.u.name} 공격 시 ATK +${value}`)}return}
  if(name==='@on'){let kind=entry.kind;if(kind==='mill')millBoth(1);if(kind==='te'){P(i).te=Math.min(300,P(i).te+number(CARDMAP['웃는 광대'],'on_summon_te'));log('웃는 광대: TE +' + number(CARDMAP['웃는 광대'],'on_summon_te'))}
- if(kind==='debuff'&&l&&l.i===opp&&!shielded(entry,target)){l.u.bonus-=number(CARDMAP['타이거드라고'],'on_summon_debuff');log(`${l.u.name} ATK -${number(CARDMAP['타이거드라고'],'on_summon_debuff')} (타이거드라고)`);enforceZero()}
+ if(kind==='debuff'&&l&&l.i===opp&&!shielded(entry,target)){changeATK(l.u,-number(CARDMAP['타이거드라고'],'on_summon_debuff'),'타이거드라고');log(`${l.u.name} ATK -${number(CARDMAP['타이거드라고'],'on_summon_debuff')} (타이거드라고)`);enforceZero()}
  if(kind==='destroy'&&l&&l.i===opp&&l.z==='a'&&!shielded(entry,target))destroy(target);
  if(kind==='move'&&l&&!shielded(entry,target)){let z=l.z==='a'?'b':'a';moveUnit(target,z,'얼티밋 팔콘')}
+ if(kind==='sky_swarm'){
+ let count=number(CARDMAP['벌새'],'on_summon_sky_swarm');
+ let possible=P(i).deck.filter(skyLow).map(name=>({name}));
+ let capacity=(5-P(i).a.length)+(5-P(i).b.length);
+ if(possible.length&&capacity>0){
+  let selected=await chooseUpTo('🐦 벌새: 덱에서 최대 2장 소환 (취소 가능)',possible,Math.min(count,capacity),1);
+  if(selected){let summoned=[];
+   for(let chosen of selected){let idx=P(i).deck.indexOf(chosen.name);if(idx<0)continue;
+    let zones=['a','b'].filter(z=>P(i)[z].length<5).map(z=>({name:z.toUpperCase()+'라인',z}));if(!zones.length)break;
+    let z=await choice(`벌새: ${chosen.name} 소환 라인`,zones,x=>x.name,false);
+    if(!z)continue;
+    P(i).deck.splice(idx,1);let unit=deploy(i,chosen.name,z.z);if(unit)summoned.push({name:chosen.name,unit,z:z.z});
+   }
+   shuffle(P(i).deck);
+   log(`벌새 특수 소환: ${summoned.map(x=>x.name+'→'+x.z.toUpperCase()).join(', ')}`);
+   if(checkDeck('벌새 덱 검색'))return;
+   for(let x of summoned){if(!g.winner)await onSummon(i,x.unit)}
+  }
+ }
+ }
  if(kind==='search'){let cards=P(i).deck.filter(n=>CARDMAP[n].race==='Sky'&&CARDMAP[n].type==='technique');if(cards.length){let names=[...new Set(cards)],x=await choice('박사 앵무새: 스카이 기술 검색',names,y=>y,false);if(x){let idx=P(i).deck.indexOf(x);P(i).deck.splice(idx,1);P(i).hand.push(x);shuffle(P(i).deck);log(`박사 앵무새 기술 검색: ${x}`);checkDeck('검색으로 덱 소진')}}}
  return}
  if(name==='@active'){let k=entry.kind,s=locate(entry.source);if(k==='butterfly'){let targetEntry=g.stack.find(x=>x.id===entry.negateId);if(targetEntry&&targetEntry.type==='monster'&&!targetEntry.reaction){targetEntry.canceled=true;log(`거품나비 효과 무효: ${targetEntry.text||targetEntry.name}`)}return}
  if(k==='frost'){if(l&&l.z==='a'&&!shielded(entry,target))moveUnit(target,'b','만년서리');return}
- if(!s)return;if(k==='goose'&&l&&l.i===opp&&l.z==='a'&&!shielded(entry,target)){l.u.bonus-=number(CARDMAP['기관총 거위'],'quick_debuff');log(`${l.u.name} ATK -${number(CARDMAP['기관총 거위'],'quick_debuff')} (기관총 거위)`);enforceZero()}
+ if(!s)return;if(k==='goose'&&l&&l.i===opp&&l.z==='a'&&!shielded(entry,target)){changeATK(l.u,-number(CARDMAP['기관총 거위'],'quick_debuff'),'기관총 거위');log(`${l.u.name} ATK -${number(CARDMAP['기관총 거위'],'quick_debuff')} (기관총 거위)`);enforceZero()}
  if(k==='hypnosis'&&l&&l.i===opp&&!shielded(entry,target)){moveUnit(target,l.z==='a'?'b':'a','최면술 로봇')}
- if(k==='levi'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Ocean'){l.u.bonus+=number(CARDMAP['해룡 레비아탄'],'leviathan_buff');log(`${l.u.name} ATK +${number(CARDMAP['해룡 레비아탄'],'leviathan_buff')} (레비아탄)`)}
+ if(k==='levi'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Ocean'){changeATK(l.u,number(CARDMAP['해룡 레비아탄'],'leviathan_buff'),'해룡 레비아탄');log(`${l.u.name} ATK +${number(CARDMAP['해룡 레비아탄'],'leviathan_buff')} (레비아탄)`)}
  if(k==='leader'&&l&&l.i===i&&l.z==='b'&&CARDMAP[l.u.name].race==='Sky'&&s.i===i&&s.z==='a'){moveUnit(target,'a','리더 기러기 효과')}return}}
  if(!c)return;let k=eff(c)[0].split(':')[0],n=number(c,k);log(`${name} 효과 해결`);
- if(k==='buff_all'){field(i).filter(u=>CARDMAP[u.name].race===c.race).forEach(u=>u.bonus+=n)}
- if(k==='buff_one'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race)l.u.bonus+=n;
- if(k==='buff_speed'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race){l.u.bonus+=n;l.u.tempSpeed=true}
- if(k==='buff_break'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race){l.u.bonus+=n;l.u.tempBreak=true}
- if(k==='buff_one_enemy_turn'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Ocean')l.u.bonus+=n;
+ if(k==='buff_all'){field(i).filter(u=>CARDMAP[u.name].race===c.race).forEach(u=>changeATK(u,n,name))}
+ if(k==='buff_one'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race)changeATK(l.u,n,name);
+ if(k==='buff_speed'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race){changeATK(l.u,n,name);l.u.tempSpeed=true}
+ if(k==='buff_break'&&l&&l.i===i&&CARDMAP[l.u.name].race===c.race){changeATK(l.u,n,name);l.u.tempBreak=true}
+ if(k==='buff_one_enemy_turn'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Ocean')changeATK(l.u,n,name);
  if(k==='smash_all')field(i).filter(u=>CARDMAP[u.name].race===c.race).forEach(u=>u.smashPlus+=n);
  if(k==='speed_all')field(i).filter(u=>CARDMAP[u.name].race==='Sky').forEach(u=>u.tempSpeed=true);
  if(k==='grant_protect'&&l&&l.i===i)l.u.tempProtect=true;
- if(k==='debuff'&&l&&l.i===opp&&!shielded(entry,target)){l.u.bonus-=n;enforceZero()}
+ if(k==='debuff'&&l&&l.i===opp&&!shielded(entry,target)){changeATK(l.u,-n,name);enforceZero()}
  if((k==='destroy_any'||k==='destroy_A')&&l&&l.i===opp&&(k!=='destroy_A'||l.z==='a')&&!shielded(entry,target))destroy(target);
  if(k==='move_enemy'&&l&&l.i===opp&&l.z==='a'&&!shielded(entry,target))moveUnit(target,'b','썰물');
  if(k==='move_enemy_front'&&l&&l.i===opp&&l.z==='b'&&!shielded(entry,target))moveUnit(target,'a','밀물');
@@ -416,11 +493,11 @@ async function resolve(entry){window.__promptOwner=entry.owner;let {owner:i,name
  if(k==='rush_forward'&&l&&l.i===i&&l.z==='b'&&CARDMAP[l.u.name].race==='Land'){if(moveUnit(target,'a','저돌맹진'))l.u.smashPlus++}
  if(k==='sacrifice_me'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Ocean'){if(discardField(target,'send'))P(i).me=Math.min(300,P(i).me+n)}
  if(k==='sacrifice_draw'&&l&&l.i===i&&CARDMAP[l.u.name].race==='Sky'){if(discardField(target,'send'))draw(i,n)}
- if(k==='inferno'){let applied=[];for(let a of entry.alloc||[]){let x=locate(a.id);if(x&&x.i===opp&&x.z==='a'&&!shielded(entry,a.id)){x.u.bonus-=a.n;applied.push(`${x.u.name} -${a.n}`)}}log('대화재 동시 적용: '+applied.join(', '));enforceZero()}
+ if(k==='inferno'){let applied=[];for(let a of entry.alloc||[]){let x=locate(a.id);if(x&&x.i===opp&&x.z==='a'&&!shielded(entry,a.id)){changeATK(x.u,-a.n,name);applied.push(`${x.u.name} -${a.n}`)}}log('대화재 동시 적용: '+applied.join(', '));enforceZero()}
  if(k==='effect_shield'&&l&&l.i===i){l.u.shield=true;log(`${l.u.name}: 이번 턴 상대 몬스터·기술 효과 면역`)}
  if(k==='indestructible'&&l&&l.i===i){l.u.indestructible=true;log(`${l.u.name}: 이번 턴 모든 파괴 방지 (ATK 0 이하 포함)`)}
  if(k==='summon_protect_A'&&g.active!==i&&P(i).a.length<5){let index=P(i).hand.indexOf(entry.handName);if(index>=0&&has(CARDMAP[entry.handName],'protect')){let card=P(i).hand.splice(index,1)[0],u=deploy(i,card,'a');log(`🚢 긴급 출항: ${card} A라인 특수 소환 (보호 가로채기 가능)`);await onSummon(i,u)}}
- if(k==='summon_small_sky'){let zone='a';for(let card of entry.summonNames||[]){let idx=P(i).hand.indexOf(card);if(idx<0||P(i)[zone].length>=5||CARDMAP[card]?.race!=='Sky'||CARDMAP[card].atk>1000)continue;P(i).hand.splice(idx,1);let u=deploy(i,card,zone);log(`일석이조: ${card} A라인 특수 소환`);await onSummon(i,u)}}
+ if(k==='summon_small_sky'){if(!await summonSkyPair(i,'a',entry.handName,entry.graveName))log('일석이조 불발: 패·묘지 대상 및 A라인 공간 재검사 실패 (0장 소환)')}
  
  if(k==='mill_both')millBoth(n);
  if(k==='mill_asymmetric'){let [ownN,opN]=eff(c)[0].split(':')[1].split(',').map(Number),ownMill=mill(i,ownN),oppMill=mill(opp,opN);if(!checkDeck('화산 분출 양측 덱 소진')){queueReactions(i,ownMill);queueReactions(opp,oppMill)}}
@@ -432,9 +509,9 @@ async function resolveCombat(){let a=g.attack;g.attack=null;let l=locate(a.attac
  let defender=d?.u||null;if(defender){let guards=P(opp).a.filter(u=>u.uid!==defender.uid&&protect(u)&&!u.protectUsed);if(guards.length){window.__promptOwner=opp;let x=await choice('🛡️ 보호 — 대신 공격받을 몬스터 (취소하면 미사용)',guards);if(x){x.protectUsed=true;defender=x;log(`${x.name} 보호 발동`)}}}
  if(!defender){let n=smash(l.u);log(`${l.u.name} 직접 공격! 덱 ${n}장 소진`);millOne(opp,n)}else{let aa=atk(l.u),bb=atk(defender),as=speed(l.u),bs=speed(defender);let deadA=aa<bb||(aa===bb&&(!as||bs)),deadB=bb<aa||(aa===bb&&(!bs||as));log(`${l.u.name} ATK ${aa} ⚔️ ${defender.name} ATK ${bb}`);let reallyDestroyed=deadB&&destroy(defender.uid);if(deadA)destroy(l.u.uid);if(reallyDestroyed&&breakthrough(l.u)&&!g.winner){log(`${l.u.name} 돌파 1!`);millOne(opp,1)}}}
 function openWindow(){if(!g||g.winner||g.priority!==null||g.attack||g.stack.length||g.triggers.length||g.reactions.length)return error('현재 우선권을 열 수 없어.');checkpoint('상대 대응 창 열기 전');openPriority(other(g.active));refresh();drive()}
-function saveGame(){if(!g)return error('저장할 게임이 없어.');localStorage.setItem('cardclash_1_72_game',JSON.stringify({g,uid,stackUid,undoHistory}));log('저장 완료');refresh()}
-function loadGame(){try{let s=JSON.parse(localStorage.getItem('cardclash_1_72_game'));if(!s)return error('저장된 게임이 없어.');g=s.g;uid=s.uid;stackUid=s.stackUid||0;undoHistory=s.undoHistory||[];sel=null;refresh();updateUndoButtons();drive()}catch(e){error('불러오기 오류: '+e.message)}}
-function exportLog(){if(!g)return;download('카드클래시_1.0_대전기록.json',JSON.stringify({...g,version:'1.0 (72종 확장판)'},null,2),'application/json')}
+function saveGame(){if(!g)return error('저장할 게임이 없어.');localStorage.setItem('cardclash_2_80_game',JSON.stringify({g,uid,stackUid,undoHistory}));log('저장 완료');refresh()}
+function loadGame(){try{let s=JSON.parse(localStorage.getItem('cardclash_2_80_game'));if(!s)return error('저장된 게임이 없어.');g=s.g;uid=s.uid;stackUid=s.stackUid||0;undoHistory=s.undoHistory||[];sel=null;refresh();updateUndoButtons();drive()}catch(e){error('불러오기 오류: '+e.message)}}
+function exportLog(){if(!g)return;download('카드클래시_2.0_대전기록.json',JSON.stringify({...g,version:'2.0 (80종 / 30장)'},null,2),'application/json')}
 function download(name,data,type){let blob=new Blob([data],{type}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
 function showDecks(){
  // Editing does not alter an ongoing game, its undo checkpoints, or card statistics.
@@ -445,7 +522,7 @@ function showDecks(){
  const overlay=document.createElement('div');overlay.className='overlay';
  const box=document.createElement('div');box.className='dialog deck-dialog';
  const h=document.createElement('h2');h.textContent='🛠️ 종족별 덱 편집';box.append(h);
- const help=document.createElement('p');help.className='deck-help';help.textContent='메인 종족별 덱 25장, 카드당 0~3장. 다른 종족 카드를 넣어 혼합 덱도 만들 수 있어. 종족 기술은 그 종족 몬스터가 필드에 있어야 발동해.';box.append(help);
+ const help=document.createElement('p');help.className='deck-help';help.textContent='메인 종족별 덱 30장, 카드당 0~3장. 다른 종족 카드를 넣어 혼합 덱도 만들 수 있어. 종족 기술은 그 종족 몬스터가 필드에 있어야 발동해.';box.append(help);
  let mixedVisible=false;const toggle=document.createElement('label');toggle.className='deck-help';toggle.style.display='block';const mixedBox=document.createElement('input');mixedBox.type='checkbox';mixedBox.onchange=()=>{mixedVisible=mixedBox.checked;redraw()};toggle.append(mixedBox,document.createTextNode(' 🌐 다른 종족 카드까지 보기 / 혼합 덱 편성'));box.append(toggle);
  const tabs=document.createElement('div');tabs.className='deck-tabs';box.append(tabs);
  const topline=document.createElement('div');topline.className='deck-topline';
@@ -454,7 +531,7 @@ function showDecks(){
  const list=document.createElement('div');list.className='deck-scroll';box.append(list);
  const alertBox=document.createElement('div');alertBox.className='deck-alert';alertBox.setAttribute('aria-live','polite');box.append(alertBox);
  const actions=document.createElement('div');actions.className='deck-actions';box.append(actions);
- const saveBtn=document.createElement('button');saveBtn.className='primary';saveBtn.textContent='✅ 25장 덱 저장';actions.append(saveBtn);
+ const saveBtn=document.createElement('button');saveBtn.className='primary';saveBtn.textContent='✅ 30장 덱 저장';actions.append(saveBtn);
  const resetBtn=document.createElement('button');resetBtn.textContent='↻ 선택 종족 기본 덱';actions.append(resetBtn);
  const exportBtn=document.createElement('button');exportBtn.textContent='⬇ 덱 설정 백업';actions.append(exportBtn);
  const importBtn=document.createElement('button');importBtn.textContent='📂 백업 불러오기';actions.append(importBtn);
@@ -471,11 +548,11 @@ function showDecks(){
      if(CARDMAP[name]?.type==='monster')monsters+=v;
      else if(CARDMAP[name]?.type==='technique')techniques+=v;
    }
-   tally.textContent=`${nm(activeRace)} · ${n}/25장 ${n===25?'✅':'⚠️'}`;tally.classList.toggle('invalid',n!==25);
+   tally.textContent=`${nm(activeRace)} · ${n}/30장 ${n===30?'✅':'⚠️'}`;tally.classList.toggle('invalid',n!==30);
    montech.textContent=`몬스터 ${monsters}장 · 기술 ${techniques}장`;
    saveBtn.disabled=!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,draft[r]));
-   if(n!==25)alertBox.textContent=`${nm(activeRace)}: ${n<25?25-n+'장을 더 넣어야':' '+(n-25)+'장을 빼야'} 저장할 수 있어.`;
-   else if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,draft[r])))alertBox.textContent='다른 종족에도 25장 미완성이 있어. 확인해 줘.';
+   if(n!==30)alertBox.textContent=`${nm(activeRace)}: ${n<30?30-n+'장을 더 넣어야':' '+(n-30)+'장을 빼야'} 저장할 수 있어.`;
+   else if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,draft[r])))alertBox.textContent='다른 종족에도 30장 미완성이 있어. 확인해 줘.';
    else alertBox.textContent='';
  }
  function redraw(){
@@ -514,17 +591,17 @@ function showDecks(){
  };
  resetBtn.onclick=()=>{draft[activeRace]=JSON.parse(JSON.stringify(DEFAULT_DECKS[activeRace]));redraw();alertBox.textContent='기본 덱으로 복원했어. 적용하려면 저장을 눌러 줘.'};
  exportBtn.onclick=()=>{
-   if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,draft[r]))){alertBox.textContent='모든 종족이 25장일 때 백업할 수 있어.';return}
-   download('카드클래시_1.0_72종_덱설정_백업.json',JSON.stringify({format:'CardClash-1.0-72-decks',decks:draft},null,2),'application/json;charset=utf-8');
+   if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,draft[r]))){alertBox.textContent='모든 종족이 30장일 때 백업할 수 있어.';return}
+   download('카드클래시_2.0_80종_덱설정_백업.json',JSON.stringify({format:'CardClash-2.0-80-decks',decks:draft},null,2),'application/json;charset=utf-8');
    alertBox.textContent='덱 설정 JSON을 내보냈어. 다른 브라우저에서도 불러올 수 있어.';
  };
  importBtn.onclick=()=>fileInput.click();
  fileInput.onchange=async()=>{
    const file=fileInput.files?.[0];if(!file)return;
    try{const saved=JSON.parse(await file.text()),decks=saved.decks||saved;
-     if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,decks[r])))throw Error('각 종족 25장 / 카드별 0~3장 규칙을 확인해 줘.');
+     if(!Object.keys(DEFAULT_DECKS).every(r=>validDeck(r,decks[r])))throw Error('각 종족 30장 / 카드별 0~3장 규칙을 확인해 줘.');
      for(const r of Object.keys(DEFAULT_DECKS))draft[r]=canonicalDeck(r,decks[r]);redraw();
-     alertBox.textContent='백업을 읽었어. 실제 적용하려면 ✅ 25장 덱 저장을 눌러 줘.';
+     alertBox.textContent='백업을 읽었어. 실제 적용하려면 ✅ 30장 덱 저장을 눌러 줘.';
    }catch(e){alertBox.textContent='백업 읽기 실패: '+e.message}
    finally{fileInput.value=''}
  };
@@ -532,7 +609,18 @@ function showDecks(){
  mixedVisible=Object.keys(draft[activeRace]).some(n=>CARDMAP[n]?.race!==activeRace);mixedBox.checked=mixedVisible;overlay.append(box);root.replaceChildren(overlay);redraw();
 }
 
-function showCatalog(){let txt=DATA.cards.map(c=>`${nm(c.race)} | ${c.type==='monster'?'몬스터':'기술'} | ${c.name} | ${c.cost}${c.type==='monster'?` ME / ATK ${c.atk}`:' TE'} | ${c.desc}`).join('\n');download('카드클래시_1.0_72종_카드텍스트.txt',txt,'text/plain;charset=utf-8')}
+function showGrave(i){if(!g||$('modalroot').children.length)return;
+ const q=P(i),root=$('modalroot'),overlay=document.createElement('div'),box=document.createElement('div');
+ overlay.className='overlay';box.className='dialog grave-dialog';let header=document.createElement('h2');header.textContent=`🪦 ${i?'오른쪽':'왼쪽'} ${nm(q.race)} 묘지 (${q.grave.length}장)`;box.append(header);
+ let list=document.createElement('div');list.className='grave-list';
+ if(!q.grave.length){let empty=document.createElement('p');empty.textContent='묘지에 카드가 없어.';list.append(empty)}
+ const counts=Object.fromEntries([...new Set(q.grave)].map(n=>[n,q.grave.filter(x=>x===n).length]));
+ for(let j=q.grave.length-1;j>=0;j--){let n=q.grave[j],c=CARDMAP[n],row=document.createElement('div');row.className=`grave-row ${c.race}`;
+  let title=document.createElement('strong');title.textContent=`${q.grave.length-j}. ${n} (${counts[n]}장)`;
+  let desc=document.createElement('span');desc.textContent=`${c.type==='monster'?`ME ${c.cost} · ATK ${c.atk}`:`TE ${c.cost}`} · ${c.desc}`;row.append(title,desc);list.append(row)}
+ box.append(list);let close=document.createElement('button');close.textContent='닫기';close.onclick=()=>root.replaceChildren();box.append(close);overlay.append(box);root.replaceChildren(overlay);
+}
+function showCatalog(){let txt=DATA.cards.map(c=>`${nm(c.race)} | ${c.type==='monster'?'몬스터':'기술'} | ${c.name} | ${c.cost}${c.type==='monster'?` ME / ATK ${c.atk}`:' TE'} | ${c.desc}`).join('\n');download('카드클래시_2.0_80종_카드텍스트.txt',txt,'text/plain;charset=utf-8')}
 
 // 조작감 개선: 패→B 소환 / 필드 A↔B 이동, 마우스·터치 공통 검사.
 function getDragCard(i,j){if(!g||g.winner||!mainAllowed(i))return null;let name=P(i).hand[j];return name&&CARDMAP[name]?.type==='monster'?{kind:'hand',i,j,name}:null}
@@ -618,15 +706,24 @@ function toggleMobileMenu(force){let panel=$('setupToolbar'),btn=$('mobileMenuBt
 }
 window.addEventListener('resize',()=>{if(!matchMedia('(orientation:landscape) and (max-height:680px) and (max-width:1200px)').matches)toggleMobileMenu(false);
  if(touchDrag){touchDrag.ghost?.remove();touchDrag=null;clearDragTargets()}});
-function cardBtn(i,z,name,id,u){let c=CARDMAP[name],b=document.createElement('button'),on=u&&eligibleAbilities(i,u).length>0;b.className=`card ${c.race} ${sel&&sel.i===i&&sel.zone===z&&sel.id===id?'sel':''} ${on?'can-activate':''}`;b.title=c.desc;b.innerHTML='<strong></strong><small></small><small></small><small></small>';b.children[0].textContent=name;b.children[1].textContent=c.type==='monster'?`ATK ${(u?atk(u):c.atk).toLocaleString()} · ME ${c.cost}`:`TE ${c.cost}`;b.children[2].textContent=c.desc;b.children[3].textContent=u?(on?'⚡ 지금 기동 효과 발동 가능':`행동 ${u.actions}/${has(c,'rush')?2:1}${u.shield?' · 🛡️효과 면역':''}`):'';b.onclick=()=>selectCard(i,z,id);
+function cardBtn(i,z,name,id,u){let c=CARDMAP[name],b=document.createElement('button'),on=u&&eligibleAbilities(i,u).length>0;b.className=`card ${c.race} ${sel&&sel.i===i&&sel.zone===z&&sel.id===id?'sel':''} ${on?'can-activate':''}`;b.title=c.desc;b.innerHTML='<strong></strong><small></small><small></small><small></small>';b.children[0].textContent=name;b.children[1].textContent=c.type==='monster'?`ATK ${(u?atk(u):c.atk).toLocaleString()} · ME ${c.cost}`:`TE ${c.cost}`;b.children[2].textContent=c.desc;
+ if(u){let parts=currentATKParts(u);if(parts.length){let calc=document.createElement('div');calc.className='atk-breakdown';let base=document.createElement('span');base.textContent=String(c.atk);base.className='atk-base';calc.append(base);
+  for(let m of parts){let chip=document.createElement('span');chip.className='atk-chip '+(m.delta>=0?'plus':'minus');chip.textContent=(m.delta>=0?'+':'')+m.delta;chip.title=m.source;chip.setAttribute('aria-label',`${m.source}: ${m.delta>=0?'+':''}${m.delta}`);calc.append(chip)}
+  let eq=document.createElement('span');eq.textContent='= '+atk(u);eq.className='atk-result';calc.append(eq);b.append(calc)}}
+ b.children[3].textContent=u?(on?'⚡ 지금 기동 효과 발동 가능':`행동 ${u.actions}/${has(c,'rush')?2:1}${u.shield?' · 🛡️효과 면역':''}`):'';b.onclick=()=>selectCard(i,z,id);
  if(z==='hand'&&c.type==='monster'){b.classList.add('hand-monster');attachDrag(b,()=>getDragCard(i,id))}
  if(u)attachDrag(b,()=>getDragUnit(i,id));
  return b}
 function render(){let status=$('status'),board=$('board');board.innerHTML='';$('error').textContent=err;if(!g){status.textContent='종족을 선택하고 새 대전을 시작해 줘.';$('instructions').textContent='☰ 메뉴·설정을 열고 종족을 골라 새 대전을 시작하세요.';return}
  status.textContent=g.winner?`🏆 ${g.winner}`:`${g.turn}턴 · ${nm(P(g.active).race)} 차례 · ${g.priority===null?'메인 단계 / 자동 해결':nm(P(g.priority).race)+' 대응 가능'}`;
  let chosenInfo=selectedCard();$('instructions').textContent=chosenInfo?`🔍 ${chosenInfo.name} · ${chosenInfo.c.desc} (눌러서 상세 보기)`:(g.priority!==null?`${nm(P(g.priority).race)} 대응 가능 · 카드/효과 선택 또는 패스`:'손패→B 소환 / 필드 A↔B 이동: 카드 끌기 · 카드 선택 시 효과 확인');
- $('chain').textContent=`연쇄 ${g.stack.map(x=>x.text||x.name).join(' → ')||'없음'} ${g.attack?'· ⚔️ 전투 대기':''} ${g.reactions.length?'· 리액션 '+g.reactions.length:''} ${g.triggers.length?'· 유발 '+g.triggers.length:''}`;$('chain').classList.toggle('chain-active',!!(g.priority!==null||g.stack.length||g.attack||g.reactions.length||g.triggers.length));
- for(let i=0;i<2;i++){let q=P(i),section=document.createElement('section');section.className='player'+(g.active===i?' active-player':'');let title=document.createElement('h2');title.textContent=`${i?'오른쪽':'왼쪽'} · ${nm(q.race)} ${g.active===i?'🔸':''}`;section.append(title);let stats=document.createElement('div');stats.innerHTML=`<span class="badge">ME ${q.me}/300</span><span class="badge">TE ${q.te}/300</span><span class="badge">덱 ${q.deck.length}</span><span class="badge">묘지 ${q.grave.length}</span><span class="badge">일반 소환 ${q.summons}/2</span>`;section.append(stats);for(let z of ['a','b']){let block=document.createElement('div');block.className='line';block.dataset.player=i;block.dataset.zone=z;
+ $('chain').textContent=`효과 처리 ${g.stack.map(x=>stackLabel(x)).join(' → ')||'없음'} ${g.attack?'· ⚔️ 전투 대기':''} ${g.reactions.length?'· 리액션: '+g.reactions.map(x=>x.name).join(', '):''} ${g.triggers.length?'· 대기: '+g.triggers.map(stackLabel).join(', '):''}`;$('chain').classList.toggle('chain-active',!!(g.priority!==null||g.stack.length||g.attack||g.reactions.length||g.triggers.length));
+ for(let i=0;i<2;i++){let q=P(i),section=document.createElement('section');section.className='player'+(g.active===i?' active-player':'');let title=document.createElement('h2');title.textContent=`${i?'오른쪽':'왼쪽'} · ${nm(q.race)} ${g.active===i?'🔸':''}`;section.append(title);let stats=document.createElement('div');stats.className='stats';
+ for(let label of [`ME ${q.me}/300`,`TE ${q.te}/300`]){let el=document.createElement('span');el.className='badge';el.textContent=label;stats.append(el)}
+ let deck=document.createElement('span');deck.className='badge deck-counter'+(deckEffects[i]&&Date.now()<deckEffects[i].until?' deck-flash':'');deck.textContent=`덱 ${q.deck.length}`;
+ if(deckEffects[i]&&Date.now()<deckEffects[i].until){let hit=document.createElement('b');hit.className='deck-loss';hit.textContent=`−${deckEffects[i].n}`;deck.append(hit)}stats.append(deck);
+ let grave=document.createElement('button');grave.type='button';grave.className='badge grave-button';grave.textContent=`🪦 묘지 ${q.grave.length}장 보기`;grave.onclick=()=>showGrave(i);stats.append(grave);
+ let summ=document.createElement('span');summ.className='badge';summ.textContent=`일반 소환 ${q.summons}/2`;stats.append(summ);section.append(stats);for(let z of ['a','b']){let block=document.createElement('div');block.className='line';block.dataset.player=i;block.dataset.zone=z;
  block.addEventListener('dragover',e=>onLineDragOver(e,i,z));
  block.addEventListener('dragleave',onLineDragLeave);
  block.addEventListener('drop',e=>onLineDrop(e,i,z));

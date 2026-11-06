@@ -2,7 +2,7 @@
 # https://dashboard.render.com/ -> New -> Blueprint
 services:
   - type: web
-    name: cardclash-1-0
+    name: cardclash-2-0
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
