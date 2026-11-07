@@ -1,4 +1,4 @@
-"""Card Clash 2.0 authoritative real-time referee.
+"""Card Clash 2.5 authoritative real-time referee.
 
 One isolated Chromium page per match runs the original v5/v1 engine.
 Each websocket sees only its seat's hand, deck count and public board.
@@ -140,7 +140,12 @@ class Room:
         self.context = await BROWSER.new_context(viewport={'width':1280,'height':850})
         self.page = await self.context.new_page()
         self.page.on('dialog', lambda dialog: asyncio.create_task(dialog.accept()))
-        await self.page.set_content((APP / 'solo.html').read_text('utf-8'))
+        # The server engine is loaded from HTML text (about:blank); inline the local
+        # deck manager script so the same engine initialization works here.
+        engine_html = (APP / 'solo.html').read_text('utf-8').replace(
+            '<script src="decks.js"></script>',
+            '<script>' + (APP / 'decks.js').read_text('utf-8') + '</script>')
+        await self.page.set_content(engine_html)
         await self.page.evaluate('''args=>{
            const [a,b]=args.races;
            document.querySelector('#race0').value=a;
@@ -311,10 +316,14 @@ async def lifespan(app):
     await BROWSER.close()
     await PLAYWRIGHT.stop()
 
-app=FastAPI(title='Card Clash 2.0',lifespan=lifespan)
+app=FastAPI(title='Card Clash 2.5',lifespan=lifespan)
 
 @app.get('/')
 async def home():return FileResponse(APP/'index.html')
+
+@app.get('/decks.js')
+async def deck_library_script():
+    return FileResponse(APP / 'decks.js', media_type='application/javascript')
 
 @app.get('/{filename}.html')
 async def page(filename: str):
@@ -326,7 +335,7 @@ async def page(filename: str):
 async def get_config():return public_data()
 
 @app.get('/api/health')
-async def health():return {'ok':True,'version':'2.0','rooms':len(ROOMS)}
+async def health():return {'ok':True,'version':'2.5','rooms':len(ROOMS)}
 
 @app.post('/api/admin/patch')
 async def patch_balance(request: Request):
