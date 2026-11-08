@@ -1,4 +1,4 @@
-"""Card Clash 2.5 authoritative real-time referee.
+"""Card Clash 3.0 authoritative real-time referee.
 
 One isolated Chromium page per match runs the original v5/v1 engine.
 Each websocket sees only its seat's hand, deck count and public board.
@@ -23,7 +23,7 @@ BASE = Path(__file__).resolve().parent
 APP = BASE / 'app'
 SAVE_DIR = Path(os.getenv('CARDCLASH_DATA_DIR', str(BASE / 'config')))
 SAVE_DIR.mkdir(parents=True, exist_ok=True)
-BAL_FILE = SAVE_DIR / 'balance.json'
+BAL_FILE = SAVE_DIR / 'balance_3_0.json'
 ADMIN_SECRET = os.getenv('CARDCLASH_ADMIN_TOKEN', '')
 RACES = {'Land', 'Ocean', 'Sky', 'Others'}
 ROOMS: dict[str, 'Room'] = {}
@@ -181,7 +181,7 @@ class Room:
             logs:g.logs.slice(-160),triggers:g.triggers.map(x=>({owner:x.owner,sourceName:x.sourceName||x.text||x.name})),err:document.getElementById('error')?.textContent||'',prompt,
             players:g.players.map(x=>({race:x.race,deck_count:x.deck.length,hand_count:x.hand.length,
               hand:x.hand,grave:x.grave,a:x.a,b:x.b,me:x.me,te:x.te,summons:x.summons})),
-            rules:DATA.rules,version:'카드클래시 2.0'};
+            rules:DATA.rules,version:'카드클래시 3.0'};
         }''')
 
     async def broadcast(self):
@@ -316,7 +316,7 @@ async def lifespan(app):
     await BROWSER.close()
     await PLAYWRIGHT.stop()
 
-app=FastAPI(title='Card Clash 2.5',lifespan=lifespan)
+app=FastAPI(title='Card Clash 3.0',lifespan=lifespan)
 
 @app.get('/')
 async def home():return FileResponse(APP/'index.html')
@@ -335,7 +335,7 @@ async def page(filename: str):
 async def get_config():return public_data()
 
 @app.get('/api/health')
-async def health():return {'ok':True,'version':'2.5','rooms':len(ROOMS)}
+async def health():return {'ok':True,'version':'3.0','rooms':len(ROOMS)}
 
 @app.post('/api/admin/patch')
 async def patch_balance(request: Request):

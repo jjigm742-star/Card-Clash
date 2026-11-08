@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 JS=r'''async()=>{
  const assert=(p,m)=>{if(!p)throw Error(m)};
  const out={};
- assert(DATA.cards.length===84,'84 types');
+ assert(DATA.cards.length===92,'92 types');
  assert(!CARDMAP['밀물']&&!CARDMAP['썰물'],'old tide removed');
  for(let race of ['Land','Ocean','Sky','Others'])assert(deckCount(DATA.decks[race])===30,'base deck '+race);
  for(let [name,cost] of Object.entries({'긴급 출항':95,'티타늄 산호':85,'청새치':75,'물결 고래':120,'밀물 썰물':80,'생명의 우물':100,'깃털':65,'파이어 트랩':75,'스켈레톤':25,'정어리':65}))assert(CARDMAP[name].cost===cost,name+' cost');

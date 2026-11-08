@@ -1,4 +1,4 @@
-/* Card Clash 2.5 — shared named deck library for solo + online. No server persistence. */
+/* Card Clash 3.0 — shared named deck library for solo + online. No server persistence. */
 (function(){
 'use strict';
 const KEY='cardclash_2_5_named_decks';
@@ -43,7 +43,7 @@ function init(gameData){data=gameData;
 function selected(r){return get(store?.selected?.[r])||list(r)[0]||null}
 function setSelected(r,which){let d=get(which);if(d&&d.race===r){store.selected[r]=which;save()}}
 function download(filename,content,type){let a=document.createElement('a'),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-function txt(d){let sorted=data.cards.filter(c=>(d.cards[c.name]||0)>0);let lines=[`카드클래시 2.5 — ${d.name}`,`기준 종족: ${names[d.race]}`,`총 ${num(d.cards)}/30장`,''];
+function txt(d){let sorted=data.cards.filter(c=>(d.cards[c.name]||0)>0);let lines=[`카드클래시 3.0 — ${d.name}`,`기준 종족: ${names[d.race]}`,`총 ${num(d.cards)}/30장`,''];
  for(let t of ['monster','technique']){lines.push(t==='monster'?'[몬스터]':'[기술]');for(let c of sorted.filter(x=>x.type===t))lines.push(`${c.name} x${d.cards[c.name]}`);lines.push('')};return lines.join('\n')}
 function css(){if(document.getElementById('cc25-deck-css'))return;let s=document.createElement('style');s.id='cc25-deck-css';s.textContent=`
 .cc25-overlay{position:fixed;z-index:100;inset:0;display:grid;place-items:center;background:#020916f0;padding:10px;color:#ecf4ff;font-family:system-ui,'Malgun Gothic',sans-serif}
